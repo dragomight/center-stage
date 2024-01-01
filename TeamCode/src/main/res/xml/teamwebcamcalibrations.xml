@@ -4,7 +4,7 @@
   Each calibration is for a particular camera (indicated by USB vid & pid pair) and a particular
   capture resolution for the camera. Note: it is very important when capturing images used to calibrate
   a camera that the image acquisition tool can actually control this capture resolution within the camera
-  itself and that you use this setting correctly. Many image acquistion tools do not in fact provide
+  itself and that you use this setting correctly. Many image acquisition tools do not in fact provide
   this level of control.
 
   Beyond simply providing additional, new camera calibrations, calibrations provided herein can
@@ -155,6 +155,18 @@
             distortionCoefficients="-0.0449369, 1.17277, 0, 0, -3.63244, 0, 0, 0"
             />
     </Camera> -->
+
+    <!-- ======================================================================================= -->
+
+    <!-- Cheap Chinese Webcam with Fisheye lens etc., Calibrated by Dragomight Industries, 2023.30.12 using 3DF Zephyr -->
+    <Camera vid="32e4" pid="9230">
+        <Calibration
+            size="640 480"
+            focalLength="283.873f, 283.873f"
+            principalPoint="322.786f, 233.764f"
+            distortionCoefficients="-0.402282922317, 0.143089200606, -0.00536509014855, 0.00433055514357, -0.0217177501972, 0, 0, 0"
+            />
+    </Camera>
 
     <!-- ======================================================================================= -->
 
