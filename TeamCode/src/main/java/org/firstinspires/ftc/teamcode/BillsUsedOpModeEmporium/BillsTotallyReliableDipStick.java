@@ -72,7 +72,7 @@ public class BillsTotallyReliableDipStick extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Strength: ", pullStrength);
             telemetry.addData("Target: ", stickTarget);
-            telemetry.addData("Position: ", stickTicks);
+            telemetry.addData("AlliancePosition: ", stickTicks);
             telemetry.update();
         }
     }

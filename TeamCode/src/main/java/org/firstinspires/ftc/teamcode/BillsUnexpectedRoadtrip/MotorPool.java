@@ -1,9 +1,16 @@
 package org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.apache.commons.math3.util.IterationListener;
+import org.firstinspires.ftc.teamcode.BillsYarm.Yoint;
 
 import java.util.List;
 
@@ -14,6 +21,15 @@ public class MotorPool {
     private DcMotorEx rightFrontDrive  = null;  //  Used to control the right front drive wheel
     private DcMotorEx leftBackDrive    = null;  //  Used to control the left back drive wheel
     private DcMotorEx rightBackDrive   = null;  //  Used to control the right back drive wheel
+
+    // Declare joint controllers for balustrade
+    public DcMotorEx joint1;
+    public DcMotorEx joint2;
+
+    // Declare balustrade servos
+    public Servo launchMan;
+    public Servo tiltMan;
+
 
     DeadWheelTracker deadWheelTracker = new DeadWheelTracker();
 
@@ -44,6 +60,35 @@ public class MotorPool {
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        try {
+            // Initialize arm dc motors
+            joint1 = hardwareMap.get(DcMotorEx.class, "Joint1");
+            joint2 = hardwareMap.get(DcMotorEx.class, "Joint2");
+
+            joint1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            joint2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            joint2.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            joint1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch (Exception e) {
+            Log.e("Actuators: initialize", "Arm dc motors failed to initialize");
+            Log.e("Actuators: initialize", e.toString());
+        }
+
+        try {
+            launchMan = hardwareMap.get(Servo.class, "Launcher");
+            launchMan.setDirection(Servo.Direction.REVERSE);
+            tiltMan = hardwareMap.get(Servo.class, "Tilter");
+        }
+        catch (Exception e) {
+            System.out.println("Servos failed to initialize");
+            Log.e("Actuators", "Servo motors failed to initialize");
+            Log.e("Actuators", e.toString());
+        }
+
         // set to bulk motor read with manual clearing of the cache
         allHubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule module : allHubs) {
@@ -69,5 +114,52 @@ public class MotorPool {
 
     public int getRightBackTicks(){
         return -rightBackDrive.getCurrentPosition();
+    }
+
+    public void setDrivePower(double leftFront, double rightFront, double rightBack, double leftBack){
+        leftFrontDrive.setPower(leftFront);
+        rightFrontDrive.setPower(rightFront);
+        rightBackDrive.setPower(rightBack);
+        leftBackDrive.setPower(leftBack);
+    }
+
+    public void update(Cadbot cadbot) {
+
+        // READ ALL DC MOTORS
+        cadbot.yarm.joint1.updateTicks(joint1.getCurrentPosition());
+        cadbot.yarm.joint2.updateTicks(joint2.getCurrentPosition());
+        cadbot.yarm.joint1.updateTicksPerSecond(joint1.getVelocity());
+        cadbot.yarm.joint2.updateTicksPerSecond(joint2.getVelocity());
+        //cadilac.yarm.calculateEndpoint();
+
+        //UPDOOT
+        //cadilac.cinnamonController.update(verbose);
+        //cadbot.yarmController.update(true);
+
+        // SET THE DC MOTORS AND SERVOS
+        if (cadbot.yarm.launch) {
+            launchMan.setPosition(0.5);
+        }
+        else {
+            launchMan.setPosition(0);
+        }
+        if (cadbot.yarm.tilt) {
+            tiltMan.setPosition(60/300.0);
+        }
+        else {
+            tiltMan.setPosition(0);
+        }
+
+        cadbot.telemetry.addData("JT1 ", joint1.getCurrentPosition());
+        cadbot.telemetry.addData("JT2 ", joint2.getCurrentPosition());
+
+        joint1.setTargetPosition(cadbot.yarm.joint1TickTarget);
+        joint2.setTargetPosition(cadbot.yarm.joint2TickTarget);
+
+        joint1.setPower(1);
+        joint2.setPower(1);
+
+        joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

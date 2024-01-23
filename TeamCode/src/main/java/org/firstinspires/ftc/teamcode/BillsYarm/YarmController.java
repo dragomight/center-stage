@@ -24,57 +24,24 @@ public class YarmController {
     }
 
     public void update(boolean verbose) {
-        //yarm.launch = gamePadState.y; // TODO: Make a new location for launcher control
+        yarm.launch = gamePadState.y; // TODO: Make a new location for launcher control
 
-        if (gamePadState.altMode) {
-            yarm.mode = YarmMode.MOVE_BY_ENDPOINT;
-
-            if (yarm.arrival1 && yarm.arrival2) {
-                stick = !stick;
-            }
-
-            if (gamePadState.rightBumper) {
-                if (stick) {
-                    yarm.endPointTarget.set(point1);
-                }
-                else {
-                    yarm.endPointTarget.set(point2);
-                }
-            }
-        }
-        else {
-            yarm.mode = YarmMode.MOVE_BY_JOINTS;
-            if (gamePadState.dPadLeft) {
-                yarm.joint1Target = 0;
-                yarm.joint2Target = 0;
-            }
-            else if (gamePadState.dPadRight) {
-                yarm.joint1Target = yarm.joint1.homeAngle;
-                yarm.joint2Target = yarm.joint2.homeAngle;
-            }
-            else if (gamePadState.dPadUp) {
-                yarm.joint1Target += 5;
-            }
-            else if (gamePadState.dPadDown) {
-                yarm.joint1Target -= 5;
-            }
-
-            if (gamePadState.y) {
-                yarm.joint2Target += 5;
-            }
-            else if (gamePadState.a) {
-                yarm.joint2Target -= 5;
-            }
-
-            if (gamePadState.x) {
-                point1 = yarm.endpoint;
-            }
-            if (gamePadState.b) {
-                point2 = yarm.endpoint;
-            }
+        if (gamePadState.dPadUp) { // Ready position
+            yarm.joint1Target = -20;
+            yarm.joint2Target = 20;
         }
 
-        yarm.updateVelocities();
+        if (gamePadState.dPadLeft) { // Pull
+            yarm.joint1Target = 50;
+            yarm.joint2Target = -50;
+        }
+
+        if (gamePadState.dPadDown) { // Rest (straight up)
+            yarm.joint1Target = 0;
+            yarm.joint2Target = 0;
+        }
+
+        //yarm.updateVelocities();
 
         if (verbose) {
             telemetry.addData("Target1 ", yarm.joint1Target);

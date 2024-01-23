@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BillsUtilityGarage;
 
+import android.util.Log;
+
 public class Vector2D {
     private double x;
     private double y;
@@ -9,7 +11,8 @@ public class Vector2D {
     }
 
     public Vector2D(double x, double y){
-        set(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     public double getX(){ return x; }
@@ -80,6 +83,8 @@ public class Vector2D {
         return Math.sqrt(x*x + y*y);
     }
 
+    public double bearingAngleInRadians(){ return Math.atan2(y, x); }
+
     public double bearingAngle(){
         return zeroTo360(Math.toDegrees(Math.atan2(y, x)));
     }
@@ -114,12 +119,21 @@ public class Vector2D {
         return Math.sqrt(dx*dx + dy*dy);
     }
 
+    public void limitToRange(double min, double max){
+        x = UtilityKit.limitToRange(x, min, max);
+        y = UtilityKit.limitToRange(y, min, max);
+    }
+
     public String toString(){
-        return String.format("[(%.2f), (%.2f)]", x, y);
+        return "["+x+", " + y + "]";
+        //String.format("[%.2f, %.2f]", x, y);
     }
 
     public Vector2D unitVector() {
         double m = magnitude();
+        if(m == 0){
+            return new Vector2D(0.0, 0.0);
+        }
         return new Vector2D(x/m, y/m);
     }
 

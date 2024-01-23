@@ -21,7 +21,10 @@ public class Yarm {
     public YarmMode mode = YarmMode.MOVE_BY_JOINTS;
 
     public Yoint joint1 = new Yoint(90, -90, -90);
-    public Yoint joint2 = new Yoint(180, 0, 90);
+    public Yoint joint2 = new Yoint(180, 0, 180);
+
+    public int joint1TickTarget;
+    public int joint2TickTarget;
 
     public double joint1Target;
     public double joint2Target;
@@ -36,6 +39,7 @@ public class Yarm {
     public double joint3Angle; // DAMNED SERVO
 
     public boolean launch = false;
+    public boolean tilt = false;
 
     public boolean arrival1;
     public boolean arrival2;

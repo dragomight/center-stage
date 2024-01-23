@@ -110,7 +110,7 @@ public class BalustradeController {
         balustrade.rAngle -= gamePadState2.rightStickY*10;
 
         if (verbose) {
-            telemetry.addData("Position ID: ", positionID);
+            telemetry.addData("AlliancePosition ID: ", positionID);
             telemetry.addData("Current length: ", balustrade.extendo.currentLength);
             telemetry.addData("Target length: ", balustrade.extendo.targetLength);
             telemetry.addData("Current joint angle: ", balustrade.joint.getAngleDeg());

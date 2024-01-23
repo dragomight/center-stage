@@ -38,14 +38,14 @@ public class OneLowPrice extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Scraping the bottom of the barrel ", true);
 
-            if (runtime.milliseconds() < 1800) {
+            if (runtime.milliseconds() < 1900) {
                 frontRight.setPower(.5);
                 backRight.setPower(.5);
                 backLeft.setPower(.5);
                 frontLeft.setPower(.5);
             }
 
-            else if (runtime.milliseconds() > 1800 && runtime.milliseconds() < 2000) {
+            else if (runtime.milliseconds() > 1800 && runtime.milliseconds() < 2200) {
                 frontRight.setPower(-.5);
                 backRight.setPower(-.5);
                 backLeft.setPower(-.5);
