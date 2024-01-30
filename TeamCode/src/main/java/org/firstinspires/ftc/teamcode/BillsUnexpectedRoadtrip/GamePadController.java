@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UtilityKit;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsYarm.Yoint;
+import org.firstinspires.ftc.teamcode.sequencer.GameField;
 
 public class GamePadController {
     private MecanumController mecanumController;
@@ -63,7 +64,7 @@ public class GamePadController {
             Vector2D1 currentPose = cadbot.deadWheelTracker.getPose();
 
             // transform that vector to robot coordinates
-            Vector2D toTargetRobotCoords = cadbot.gameField.fieldToRobot(new Vector2D(x, y), currentPose.getHeading());
+            Vector2D toTargetRobotCoords = GameField.fieldToRobot(new Vector2D(x, y), currentPose.getHeading());
 
             // if yaw is zero, attempt to maintain the preferred heading
             if(yaw == 0) {

@@ -78,6 +78,7 @@ public class GiddyOpMode extends LinearOpMode{
 
         // todo: store the current field pose for the driver op mode
         writeToFile(cadbot.deadWheelTracker.getPose());
+        cadbot.quit();
     }
 
     public void writeToFile(Vector2D1 v){

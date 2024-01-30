@@ -68,6 +68,8 @@ public class BillsTestDrive extends LinearOpMode {
         while (!isStopRequested()) {
             cadbot.update();
         }
+
+        cadbot.quit();
     }
 
     public Vector2D1 readFromFileUsingScanner() {

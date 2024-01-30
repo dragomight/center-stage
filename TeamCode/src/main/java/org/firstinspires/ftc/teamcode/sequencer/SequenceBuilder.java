@@ -1,0 +1,110 @@
+package org.firstinspires.ftc.teamcode.sequencer;
+
+import android.util.Log;
+
+import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
+import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
+import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
+import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
+import org.firstinspires.ftc.teamcode.sequencer.actions.DriveTo;
+import org.firstinspires.ftc.teamcode.sequencer.actions.PlaceBackwardOnSpike;
+import org.firstinspires.ftc.teamcode.sequencer.actions.PlaceForwardOnSpike;
+import org.firstinspires.ftc.teamcode.sequencer.actions.RetractArm;
+import org.firstinspires.ftc.teamcode.sequencer.actions.RobotAction;
+import org.firstinspires.ftc.teamcode.sequencer.actions.RotateTo;
+import org.firstinspires.ftc.teamcode.sequencer.actions.ScanBackwardForTagLocation;
+import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForSmartStout;
+import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForwardForTagLocation;
+
+/**
+ * This class allows an elegant way to construct an action sequence.
+ */
+public class SequenceBuilder {
+
+    private ActionSequence sequence = new ActionSequence();
+    private Cadbot cadbot;
+
+    public SequenceBuilder(Cadbot cadbot){
+        if(cadbot == null)
+            Log.e("SequenceBuilder", "Cadbot is null in constructor");
+        this.cadbot = cadbot;
+    }
+
+    public ActionSequence build(){
+        return sequence;
+    }
+
+    public SequenceBuilder add(RobotAction action){
+        if(sequence == null){
+            sequence = new ActionSequence();
+        }
+        sequence.add(action);
+        return this;
+    }
+
+    public SequenceBuilder driveTo(Vector2D position, double heading){
+        if(cadbot == null)
+            Log.e("SequenceBuilder", "null cadbot");
+        if(position == null)
+            Log.e("SequenceBuilder", "null position");
+        try {
+            sequence.add(new DriveTo(cadbot, new Vector2D1(position, heading)));
+        }
+        catch (Exception e){
+            Log.e("SequenceBuilder", e.toString());
+        }
+        return this;
+    }
+
+    public SequenceBuilder driveTo(double x, double y, double heading){
+        sequence.add(new DriveTo(cadbot, new Vector2D1(x, y, heading)));
+        return this;
+    }
+
+    public SequenceBuilder rotateTo(Vector2D position, double heading){
+        sequence.add(new RotateTo(cadbot, new Vector2D1(position, heading)));
+        return this;
+    }
+
+    public SequenceBuilder rotateTo(double x, double y, double heading){
+        sequence.add(new RotateTo(cadbot, new Vector2D1(x, y, heading)));
+        return this;
+    }
+
+    public SequenceBuilder scanForSmartStout(SpikeMark spikeMark){
+        sequence.add(new ScanForSmartStout(cadbot, spikeMark));
+        return this;
+    }
+
+    public SequenceBuilder placeForwardOnSpike(){
+        sequence.add(new PlaceForwardOnSpike());
+        return this;
+    }
+
+
+    public SequenceBuilder placeBackwardOnSpike(){
+        sequence.add(new PlaceBackwardOnSpike());
+        return this;
+    }
+
+    public SequenceBuilder retractArm(){
+        sequence.add(new RetractArm());
+        return this;
+    }
+
+    public SequenceBuilder append(ActionSequence s){
+        sequence.append(s);
+        return this;
+    }
+
+    public SequenceBuilder scanBackwardForLocation(){
+        sequence.add(new ScanBackwardForTagLocation(cadbot));
+        return this;
+    }
+
+    public SequenceBuilder scanForwardForLocation(){
+        sequence.add(new ScanForwardForTagLocation(cadbot));
+        return this;
+    }
+
+}

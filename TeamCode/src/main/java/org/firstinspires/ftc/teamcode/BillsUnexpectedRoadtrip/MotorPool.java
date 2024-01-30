@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.apache.commons.math3.util.IterationListener;
+import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsYarm.Yoint;
 
 import java.util.List;
@@ -30,40 +31,57 @@ public class MotorPool {
     public Servo launchMan;
     public Servo tiltMan;
 
+    // Gripper servos
+    private Servo rock; // wrist pitch
+    private Servo roll; // wrist roll
+    private Servo gripperTop; // super speed servos
+    private Servo gripperBottom;
 
-    DeadWheelTracker deadWheelTracker = new DeadWheelTracker();
+    // Functionality Limits
+    public boolean gripperOnline = true;
 
     public void initialize(HardwareMap hardwareMap){
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must match the names assigned during the robot configuration.
-        // step (using the FTC Robot Controller app on the phone).
-        leftFrontDrive  = hardwareMap.get(DcMotorEx.class, "FrontLeft");
-        rightFrontDrive = hardwareMap.get(DcMotorEx.class, "FrontRight");
-        leftBackDrive  = hardwareMap.get(DcMotorEx.class, "BackLeft");
-        rightBackDrive = hardwareMap.get(DcMotorEx.class, "BackRight");
 
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        try {
 
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            // Initialize the hardware variables. Note that the strings used here as parameters
+            // to 'get' must match the names assigned during the robot configuration.
+            // step (using the FTC Robot Controller app on the phone).
+            leftFrontDrive = hardwareMap.get(DcMotorEx.class, "FrontLeft");
+            rightFrontDrive = hardwareMap.get(DcMotorEx.class, "FrontRight");
+            leftBackDrive = hardwareMap.get(DcMotorEx.class, "BackLeft");
+            rightBackDrive = hardwareMap.get(DcMotorEx.class, "BackRight");
 
+            // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
+            // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
+            // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch (Exception e){
+            Log.e("MotorPool", "Drivetrain and rotary encoders failed to initialize.");
+            Log.e("MotorPool", e.toString());
+        }
         try {
             // Initialize arm dc motors
             joint1 = hardwareMap.get(DcMotorEx.class, "Joint1");
             joint2 = hardwareMap.get(DcMotorEx.class, "Joint2");
+
+            joint1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            joint2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             joint1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             joint2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -74,19 +92,34 @@ public class MotorPool {
             joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         catch (Exception e) {
-            Log.e("Actuators: initialize", "Arm dc motors failed to initialize");
-            Log.e("Actuators: initialize", e.toString());
+            Log.e("MotorPool: initialize", "Arm dc motors failed to initialize");
+            Log.e("MotorPool: initialize", e.toString());
         }
 
         try {
             launchMan = hardwareMap.get(Servo.class, "Launcher");
             launchMan.setDirection(Servo.Direction.REVERSE);
             tiltMan = hardwareMap.get(Servo.class, "Tilter");
+
         }
         catch (Exception e) {
             System.out.println("Servos failed to initialize");
             Log.e("Actuators", "Servo motors failed to initialize");
             Log.e("Actuators", e.toString());
+        }
+
+        try{
+            gripperBottom = hardwareMap.get(Servo.class, "GripperBottom");
+            gripperTop = hardwareMap.get(Servo.class, "GrippperTop");
+            rock = hardwareMap.get(Servo.class, "Rock");
+            roll = hardwareMap.get(Servo.class, "Roll");
+
+        }
+        catch (Exception e) {
+            System.out.println("Servos failed to initialize");
+            Log.e("MotorPool", "Gripper servo motors failed to initialize");
+            Log.e("MotorPool", e.toString());
+            gripperOnline = false;
         }
 
         // set to bulk motor read with manual clearing of the cache
@@ -104,6 +137,7 @@ public class MotorPool {
         }
     }
 
+    // THREE DEAD WHEEL ODOMETRY READERS
     public int getLeftFrontTicks(){
         return -leftFrontDrive.getCurrentPosition();
     }
@@ -116,6 +150,57 @@ public class MotorPool {
         return -rightBackDrive.getCurrentPosition();
     }
 
+    // TWO ARM JOINT READERS
+
+    public int getJoint1Ticks(){
+        return joint1.getCurrentPosition();
+    }
+
+    public int getJoint2Ticks(){
+        return joint2.getCurrentPosition();
+    }
+
+    public double getJoint1TicksPerSecond(){
+        return joint1.getVelocity();
+    }
+
+    public double getJoint2TicksPerSecond(){
+        return joint2.getVelocity();
+    }
+
+    public void setJoint1TicksPerSecond(double tps){
+        joint1.setVelocity(tps);
+    }
+
+    public void setJoint2TicksPerSecond(double tps){
+        joint2.setVelocity(tps);
+    }
+
+    public void setRockJointPosition(double pos){
+        if(gripperOnline)
+            rock.setPosition(pos);
+    }
+
+    public void setRollJointPosition(double pos){
+        if(gripperOnline)
+            roll.setPosition(pos);
+    }
+
+    public double getRockJointPosition(){
+        if(gripperOnline)
+            return rock.getPosition();
+        else
+            return 0.0;
+    }
+
+    // this will just return the value you set it to, not something detected
+    public double getRollJointPosition(){
+        if(gripperOnline)
+            return roll.getPosition();
+        else
+            return 0.0;
+    }
+
     public void setDrivePower(double leftFront, double rightFront, double rightBack, double leftBack){
         leftFrontDrive.setPower(leftFront);
         rightFrontDrive.setPower(rightFront);
@@ -126,10 +211,10 @@ public class MotorPool {
     public void update(Cadbot cadbot) {
 
         // READ ALL DC MOTORS
-        cadbot.yarm.joint1.updateTicks(joint1.getCurrentPosition());
-        cadbot.yarm.joint2.updateTicks(joint2.getCurrentPosition());
-        cadbot.yarm.joint1.updateTicksPerSecond(joint1.getVelocity());
-        cadbot.yarm.joint2.updateTicksPerSecond(joint2.getVelocity());
+//        cadbot.yarm.joint1.updateTicks(joint1.getCurrentPosition());
+//        cadbot.yarm.joint2.updateTicks(joint2.getCurrentPosition());
+//        cadbot.yarm.joint1.updateTicksPerSecond(joint1.getVelocity());
+//        cadbot.yarm.joint2.updateTicksPerSecond(joint2.getVelocity());
         //cadilac.yarm.calculateEndpoint();
 
         //UPDOOT
@@ -150,16 +235,16 @@ public class MotorPool {
             tiltMan.setPosition(0);
         }
 
-        cadbot.telemetry.addData("JT1 ", joint1.getCurrentPosition());
-        cadbot.telemetry.addData("JT2 ", joint2.getCurrentPosition());
-
-        joint1.setTargetPosition(cadbot.yarm.joint1TickTarget);
-        joint2.setTargetPosition(cadbot.yarm.joint2TickTarget);
-
-        joint1.setPower(1);
-        joint2.setPower(1);
-
-        joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        cadbot.telemetry.addData("JT1 ", joint1.getCurrentPosition());
+//        cadbot.telemetry.addData("JT2 ", joint2.getCurrentPosition());
+//
+//        joint1.setTargetPosition(cadbot.yarm.joint1TickTarget);
+//        joint2.setTargetPosition(cadbot.yarm.joint2TickTarget);
+//
+//        joint1.setPower(1);
+//        joint2.setPower(1);
+//
+//        joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

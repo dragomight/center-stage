@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
-import org.firstinspires.ftc.teamcode.sequence.GameField;
+import org.firstinspires.ftc.teamcode.sequencer.GameField;
 
 import java.util.ArrayList;
 
@@ -70,15 +70,16 @@ public class DeadWheelTracker {
     // history of time intervals
     public ArrayList<Double> times = new ArrayList<>();
 
-    MotorPool motorPool;
+    private Cadbot cadbot;
+    private MotorPool motorPool;
     private double steps = 0;
     private double avgDt = 0;
 
-    public void initialize(MotorPool motorPool, GameField gameField){
-        this.motorPool = motorPool;
+    public void initialize(Cadbot cadbot){
+        this.cadbot = cadbot;
+        this.motorPool = cadbot.motorPool;
         // initialize the coordinates
-        Vector2D1 pose = gameField.getStartPose();
-        resetPose(pose);
+        resetPose(GameField.getStartPose(cadbot.allianceColor, cadbot.alliancePosition, FORWARD_OFFSET));
     }
 
     public void resetPose(Vector2D1 pose){
@@ -92,7 +93,7 @@ public class DeadWheelTracker {
         velocities.add(new Vector2D1(0, 0, 0));
         accelerations.add(new Vector2D1(0, 0, 0));
         dt = runtime.seconds();
-        runtime.reset(); // todo: do we need this?
+        runtime.reset();
         times.add(dt);
         Log.e("DriveTo", "DWT resetPose to" + pose.toString());
     }
