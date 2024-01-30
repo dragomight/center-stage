@@ -17,10 +17,12 @@ public class ArmPoseXZ {
         this.th4 = th4;
     }
 
+    // gets the home pose
     public static ArmPoseXZ home(){
         return new ArmPoseXZ(5.0, 0.0, Math.toRadians(90.0), 0);
     }
 
+    // gets the ready pose
     public static ArmPoseXZ ready(){
         return new ArmPoseXZ(5.0, 7.0, Math.toRadians(90.0), 0); // pitch should be calculated from arm angles
     }

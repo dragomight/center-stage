@@ -46,11 +46,25 @@ public class GameField {
     public final static double HEIGHT_BOTTOM_ROW = 8.5; // in 11, 13.5,
     // pixel bottom row is 1-6, then 1-7, then 1-6, etc.
 
-    // returns how far out, left, and up a pixel center is given its row and column numbers
+    /**
+     *  Returns how far out, left, and up a pixel center is given its row and column numbers.
+     *  row is numbered from bottom to top.
+     *  col is numbered from left to right
+     *  x has origin at the base of the board (this needs to be added to the distance from the robot to the base to be fully in robot coordinates)
+     *  y has origin in the center of the board
+     *  z has origin at the floor level
+     */
     public static Vector3D getBackdropPixelPosition(double row, double col){
         double hyp = HEIGHT_BOTTOM_ROW + ROW_SPACING * row; // height along the grid surface (hypotenuse)
         double x = hyp * COS_BDA;
-        double y = COL_SPACING * col + COL_SPACING/2 * (row%2);
+        double y = 0;
+        // if row is odd (we start with row 1)
+        if(row%2==1){
+            y = COL_SPACING * (3.5-col); // where is origin of y is center of the board and +y is left
+        }
+        else{
+            y = COL_SPACING * (4.0-col);
+        }
         double z = hyp * SIN_BDA;
         return new Vector3D(x, y, z);
     }
@@ -160,7 +174,7 @@ public class GameField {
      * @param y
      * @return
      */
-    public Vector2D centerOfTile(int x, int y){
+    public static Vector2D centerOfTile(int x, int y){
         return new Vector2D((x-3)*TILE_SIZE - HALF_TILE_SIZE, (y-3)*TILE_SIZE - HALF_TILE_SIZE);
     }
 }

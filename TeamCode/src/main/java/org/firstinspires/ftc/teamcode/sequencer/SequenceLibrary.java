@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.sequencer;
 
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
+import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
 
 public class SequenceLibrary {
 
@@ -15,7 +17,7 @@ public class SequenceLibrary {
     }
 
     private Vector2D centerOfTile(int x, int y){
-        return cadbot.gameField.centerOfTile(x, y);
+        return GameField.centerOfTile(x, y);
     }
 
     public ActionSequence blueLeft(){
@@ -105,24 +107,33 @@ public class SequenceLibrary {
                 .build();
     }
 
-    public ActionSequence placeOnBackdropAt(int x, int y){
+    // This action sequence assumes you are parked right in front of the backdrop center
+    public ActionSequence placeOnBackdropAt(int row, int col){
 
-        Vector2D backdrop;
+        // get the placement coordinates (x is forward, y is left, z is up)
+        Vector3D target = GameField.getBackdropPixelPosition(row, col);
+
+        // get backdrop location
+        Vector2D backdrop; // a vector to the backdrop location
         if(cadbot.allianceColor == AllianceColor.BLUE){
-            backdrop = cadbot.gameField.BLUE_BACKDROP;
+            backdrop = GameField.BLUE_BACKDROP;
         }
         else{ // RED
-            backdrop = cadbot.gameField.RED_BACKDROP;
+            backdrop = GameField.RED_BACKDROP;
         }
+
+        // build the sequence, assumes we already facing and near to the center of the backdrop
         return new SequenceBuilder(cadbot)
                 .driveTo(backdrop, 0) // move to the backdrop, facing it
-
+                .scanForwardForLocation()
         // strafe to position
-                .driveTo(backdrop.add(0, y * cadbot.gameField.GRID_Y), 0)
-        // approach close, slowly
-        // extend arm to target grid location, if sensor available use it to detect the backdrop
+                .driveTo(backdrop.add(0.0, target.y), 0)
+        // extend arm to target grid location, if sensor available use it to detect touching the backdrop
+                .moveArmTo(new ArmPoseXZ(target.x, target.z, Math.toRadians(30.0), 0))
         // gripper pushes a pixel off
+                .gripperPush(0.5, true)
         // retract arm
+                .moveArmTo(ArmPoseXZ.ready())
         // backup slightly
                 .build();
     }

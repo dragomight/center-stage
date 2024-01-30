@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode.sequencer;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.sequencer.actions.DriveTo;
+import org.firstinspires.ftc.teamcode.sequencer.actions.GripperPush;
+import org.firstinspires.ftc.teamcode.sequencer.actions.MoveArmTo;
 import org.firstinspires.ftc.teamcode.sequencer.actions.PlaceBackwardOnSpike;
 import org.firstinspires.ftc.teamcode.sequencer.actions.PlaceForwardOnSpike;
 import org.firstinspires.ftc.teamcode.sequencer.actions.RetractArm;
@@ -81,6 +84,11 @@ public class SequenceBuilder {
         return this;
     }
 
+    public SequenceBuilder moveArmTo(ArmPoseXZ targetArmPoseXZ){
+        sequence.add(new MoveArmTo(cadbot, targetArmPoseXZ));
+        return this;
+    }
+
 
     public SequenceBuilder placeBackwardOnSpike(){
         sequence.add(new PlaceBackwardOnSpike());
@@ -104,6 +112,11 @@ public class SequenceBuilder {
 
     public SequenceBuilder scanForwardForLocation(){
         sequence.add(new ScanForwardForTagLocation(cadbot));
+        return this;
+    }
+
+    public SequenceBuilder gripperPush(double seconds, boolean push){
+        sequence.add(new GripperPush(cadbot, seconds, push));
         return this;
     }
 

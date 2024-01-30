@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip;
 import android.util.Log;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -34,8 +35,8 @@ public class MotorPool {
     // Gripper servos
     private Servo rock; // wrist pitch
     private Servo roll; // wrist roll
-    private Servo gripperTop; // super speed servos
-    private Servo gripperBottom;
+    private CRServo gripperTop; // super speed servos
+    private CRServo gripperBottom;
 
     // Functionality Limits
     public boolean gripperOnline = true;
@@ -109,8 +110,8 @@ public class MotorPool {
         }
 
         try{
-            gripperBottom = hardwareMap.get(Servo.class, "GripperBottom");
-            gripperTop = hardwareMap.get(Servo.class, "GrippperTop");
+            gripperBottom = hardwareMap.get(CRServo.class, "GripperBottom");
+            gripperTop = hardwareMap.get(CRServo.class, "GrippperTop");
             rock = hardwareMap.get(Servo.class, "Rock");
             roll = hardwareMap.get(Servo.class, "Roll");
 
@@ -199,6 +200,33 @@ public class MotorPool {
             return roll.getPosition();
         else
             return 0.0;
+    }
+
+    public void setGripperStop(){
+        if(gripperOnline) {
+            gripperTop.setDirection(DcMotorSimple.Direction.FORWARD);
+            gripperTop.setPower(0.0);
+            gripperBottom.setDirection(DcMotorSimple.Direction.REVERSE);
+            gripperBottom.setPower(0.0);
+        }
+    }
+
+    public void setGripperPush(){
+        if(gripperOnline) {
+            gripperTop.setDirection(DcMotorSimple.Direction.FORWARD);
+            gripperTop.setPower(1.0);
+            gripperBottom.setDirection(DcMotorSimple.Direction.REVERSE);
+            gripperBottom.setPower(1.0);
+        }
+    }
+
+    public void setGripperPull(){
+        if(gripperOnline){
+            gripperTop.setDirection(DcMotorSimple.Direction.REVERSE);
+            gripperTop.setPower(1.0);
+            gripperBottom.setDirection(DcMotorSimple.Direction.FORWARD);
+            gripperBottom.setPower(1.0);
+        }
     }
 
     public void setDrivePower(double leftFront, double rightFront, double rightBack, double leftBack){
