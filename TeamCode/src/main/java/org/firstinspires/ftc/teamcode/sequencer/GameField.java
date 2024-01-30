@@ -37,8 +37,23 @@ public class GameField {
     public final static Vector2D BLUE_BACKDROP = new Vector2D(TILE_SIZE * 2 + 4, -TILE_SIZE * 1.5);
     public final static Vector2D RED_BACKDROP = new Vector2D(TILE_SIZE * 2 + 4, TILE_SIZE * 1.5);
 
-    public final static double GRID_X = 3.0; // spacing of the pixel grid, x is up from bottom
-    public final static double GRID_Y = 3.0; // spacing of the pixel grid, y is right from left most 1-6, then 1-7, then 1-6, etc.
+    public final static double BACKDROP_ANGLE = Math.toRadians(60.0); // angle from floor, can be 62.0
+    public final static double COS_BDA = Math.cos(BACKDROP_ANGLE);
+    public final static double SIN_BDA = Math.sin(BACKDROP_ANGLE);
+
+    public final static double COL_SPACING = 3.0; // spacing of the pixel grid, x is left to right
+    public final static double ROW_SPACING = 2.5; // spacing of the pixel grid, y is bottom to top
+    public final static double HEIGHT_BOTTOM_ROW = 8.5; // in 11, 13.5,
+    // pixel bottom row is 1-6, then 1-7, then 1-6, etc.
+
+    // returns how far out, left, and up a pixel center is given its row and column numbers
+    public static Vector3D getBackdropPixelPosition(double row, double col){
+        double hyp = HEIGHT_BOTTOM_ROW + ROW_SPACING * row; // height along the grid surface (hypotenuse)
+        double x = hyp * COS_BDA;
+        double y = COL_SPACING * col + COL_SPACING/2 * (row%2);
+        double z = hyp * SIN_BDA;
+        return new Vector3D(x, y, z);
+    }
 
     /**
      * Forward offset is the distance from the back of the robot to its center, and should be positive.

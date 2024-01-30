@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmConstants;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPose;
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmTracker;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.InverseKinematics;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.Kinematics;
@@ -16,6 +17,7 @@ public class MoveArmTo implements RobotAction{
     private Cadbot cadbot;
     private ArmTracker armTracker;
     private ArmPose targetPose;
+    private ArmPoseXZ targetArmPoseXZ;
     private boolean done = false;
     private double rock, roll; // the target pitch and roll of the gripper
     private ArmPose pose; // the current pose
@@ -25,21 +27,24 @@ public class MoveArmTo implements RobotAction{
     private Vector2D j3LastPose = new Vector2D();
     private Vector2D targetSpeed = new Vector2D();
 
-    public MoveArmTo(Cadbot cadbot, double x, double z, double rock, double roll){
+    public MoveArmTo(Cadbot cadbot, ArmPoseXZ targetArmPoseXZ){
         this.cadbot = cadbot;
         this.armTracker = cadbot.armTracker;
-        this.rock = rock;
-        this.roll = roll;
-        tipTarget = new Vector2D(x, z);
+        this.targetArmPoseXZ = targetArmPoseXZ;
+
+        this.rock = targetArmPoseXZ.th3;
+        this.roll = targetArmPoseXZ.th4;
+        tipTarget = new Vector2D(targetArmPoseXZ.x, targetArmPoseXZ.z);
     }
 
     @Override
     public void update() {
-        // get the current arm pose
-        pose = armTracker.getPose();
+        // get the time interval
         double dt = cadbot.deadWheelTracker.getTime();
 
-        // kinematic update (tells us the end point position of the tip relative to robot center):
+        // get the current arm pose (in angles)
+        pose = armTracker.getPose();
+
         // Position of the third joint calculated from angles by kinematics
         Vector2D j3Pose = Kinematics.j3(pose);
         // Velocity is updated
