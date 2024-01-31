@@ -86,6 +86,9 @@ public class BillsTestDrive extends LinearOpMode {
         }
         catch (Exception e){
             System.out.println(e);
+            d[0]=0;
+            d[1]=0;
+            d[2]=0;
             Log.e("BillsTestDrive", e.toString());
         }
         return new Vector2D1(d[0], d[1], d[2]);

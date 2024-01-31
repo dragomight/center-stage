@@ -123,7 +123,7 @@ public class DriveTo implements RobotAction{
         powBot.multiplyBy(power);
         cadbot.mecanumController.setDrivePowerRelativeToRobot(powBot.getX(), -powBot.getY(), yaw);
 
-        Log.e("DriveTo", cadbot.deadWheelTracker.toString() + "   powBot=" + powBot.toString() + yaw + "   d=" + distance + "  e=" + Math.toDegrees(error) + " toT=" + toTarget);
+//        Log.e("DriveTo", cadbot.deadWheelTracker.toString() + "   powBot=" + powBot.toString() + yaw + "   d=" + distance + "  e=" + Math.toDegrees(error) + " toT=" + toTarget);
 //        Log.e("DriveTo", "target=" + target.toString());
 //        Log.e("DriveTo", "toTarget="+toTarget.toString() + "   dist=" + distance + "   dMag=" + dMag);
 //        Log.e("DriveTo", "d=" + d.toString());

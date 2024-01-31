@@ -22,6 +22,7 @@ public class DeadWheelTracker {
     public static double LATERAL_DISTANCE = 7.25; // in; distance between the left and right wheels
     public static double FORWARD_OFFSET = -3.3; //-3.75 + 0.3; // in; offset of the lateral wheel from center of robot (negative is toward the back), the first number is measured, the second is tuning
     public static double INCHES_PER_TICK = 2*Math.PI*WHEEL_RADIUS/TICKS_PER_REV;
+    public static double DISTANCE_FROM_WALL = 8.5; // The distance from the back of the robot to its center at start
 
     private double heading = 0; // robot's bearing in radians
     private double xWorld = 0; // the robot's position in world coordinates, in inches
@@ -79,7 +80,7 @@ public class DeadWheelTracker {
         this.cadbot = cadbot;
         this.motorPool = cadbot.motorPool;
         // initialize the coordinates
-        resetPose(GameField.getStartPose(cadbot.allianceColor, cadbot.alliancePosition, FORWARD_OFFSET));
+        resetPose(GameField.getStartPose(cadbot.allianceColor, cadbot.alliancePosition, DISTANCE_FROM_WALL));
     }
 
     public void resetPose(Vector2D1 pose){

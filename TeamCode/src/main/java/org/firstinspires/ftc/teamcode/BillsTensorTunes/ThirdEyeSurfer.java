@@ -136,7 +136,7 @@ public class ThirdEyeSurfer {
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
+        Log.e("ThirdEyeSurfer", "maxconf=" + maxConf + " size=" + currentRecognitions.size());
         return maxConf;
     }
 
@@ -170,7 +170,7 @@ public class ThirdEyeSurfer {
 
     // call this to save computing resources when the camera input is not needed while the robot is running
     public void ignoreCameras(){
-        visionPortal.stopStreaming();
+        //visionPortal.stopStreaming();
     }
 
     // call this when the op mode is ending

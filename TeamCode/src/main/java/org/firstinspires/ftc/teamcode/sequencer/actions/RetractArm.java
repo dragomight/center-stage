@@ -8,6 +8,6 @@ public class RetractArm implements RobotAction{
 
     @Override
     public boolean isDone() {
-        return false;
+        return true;
     }
 }

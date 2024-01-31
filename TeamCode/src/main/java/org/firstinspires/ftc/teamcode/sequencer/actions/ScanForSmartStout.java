@@ -48,23 +48,23 @@ public class ScanForSmartStout implements RobotAction{
                 }
                 // if RED
                 else {
-                    //cadbot.autoPilot.sequenceDirector.addSequence(cadbot.autoPilot.sequenceLibrary.redPlacesAtMiddleSpike());
+//                    cadbot.autoPilot.sequenceDirector.addSequence(cadbot.autoPilot.sequenceLibrary.redPlacesAtMiddleSpike());
                 }
                 //done = true;
                 return;
             }
             // else, no ale on the bar, try the right spike
-//            else{
-//                if (cadbot.allianceColor == AllianceColor.BLUE) {
-//                    //cadbot.autoPilot.sequenceDirector.addSequence(cadbot.autoPilot.sequenceLibrary.blueScanOtherSpikes());
-//                }
-//                // if RED
-//                else {
+            else{
+                if (cadbot.allianceColor == AllianceColor.BLUE) {
+                    //cadbot.autoPilot.sequenceDirector.addSequence(cadbot.autoPilot.sequenceLibrary.blueScanOtherSpikes());
+                }
+                // if RED
+                else {
 //                    cadbot.autoPilot.sequenceDirector.addSequence(cadbot.autoPilot.sequenceLibrary.redScansOtherSpikes());
-//                }
+                }
 //                done = true;
-//                return;
-//            }
+                return;
+            }
         }
 
         // IF READING THE LEFT AND RIGHT SPIKES

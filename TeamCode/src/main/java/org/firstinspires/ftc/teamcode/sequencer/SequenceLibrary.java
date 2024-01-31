@@ -32,14 +32,21 @@ public class SequenceLibrary {
 //        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(5, 5), Math.toRadians(0))));
 //        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(5, 4), Math.toRadians(0))));
 //        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(6, 4), Math.toRadians(0))));
-        return new SequenceBuilder(cadbot).build();
+        return new SequenceBuilder(cadbot)
+                .driveTo(centerOfTile(2, 5), Math.toRadians(-90))
+                .rotateTo(centerOfTile(2,  5),Math.toRadians(0))
+                .driveTo(centerOfTile(5, 5),Math.toRadians(0))
+                .driveTo(centerOfTile(5, 4),Math.toRadians(0))
+                .driveTo(centerOfTile(6, 4),Math.toRadians(0))
+                .build();
     }
 
     public ActionSequence redLeft(){
-        return new SequenceBuilder(cadbot)
-                .driveTo(centerOfTile(2,2), Math.toRadians(90))
-                .scanForSmartStout(SpikeMark.MIDDLE)
-                .build();
+        return armCalibrationTest();
+//        return new SequenceBuilder(cadbot)
+//                .driveTo(centerOfTile(2,2), Math.toRadians(90))
+//                .scanForSmartStout(SpikeMark.MIDDLE)
+//                .build();
     }
 
     public ActionSequence redRight(){
@@ -60,6 +67,13 @@ public class SequenceLibrary {
                 .rotateTo(0, 0, Math.toRadians(-90))
                 .rotateTo(0, 0, Math.toRadians(180))
                 .rotateTo(0, 0, Math.toRadians(90))
+                .build();
+    }
+
+    public ActionSequence armCalibrationTest(){
+        return new SequenceBuilder(cadbot)
+                .gripperPush(0.3, true)
+//                .moveArmTo(new ArmPoseXZ(0, 0, 0, 0))
                 .build();
     }
 
@@ -103,6 +117,7 @@ public class SequenceLibrary {
 
     public ActionSequence redLeftUsesCenter(){
         return new SequenceBuilder(cadbot)
+                // todo: scan april tag ?
                 .driveTo(centerOfTile(5, 3), 0)
                 .build();
     }
