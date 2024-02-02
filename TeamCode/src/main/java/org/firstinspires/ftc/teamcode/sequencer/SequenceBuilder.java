@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.sequencer;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
-import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
@@ -16,7 +15,7 @@ import org.firstinspires.ftc.teamcode.sequencer.actions.RetractArm;
 import org.firstinspires.ftc.teamcode.sequencer.actions.RobotAction;
 import org.firstinspires.ftc.teamcode.sequencer.actions.RotateTo;
 import org.firstinspires.ftc.teamcode.sequencer.actions.ScanBackwardForTagLocation;
-import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForSmartStout;
+import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForSmartStouts;
 import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForwardForTagLocation;
 import org.firstinspires.ftc.teamcode.sequencer.actions.Wait;
 
@@ -75,8 +74,8 @@ public class SequenceBuilder {
         return this;
     }
 
-    public SequenceBuilder scanForSmartStout(SpikeMark spikeMark){
-        sequence.add(new ScanForSmartStout(cadbot, spikeMark));
+    public SequenceBuilder scanForSmartStout(){
+        sequence.add(new ScanForSmartStouts(cadbot));
         return this;
     }
 

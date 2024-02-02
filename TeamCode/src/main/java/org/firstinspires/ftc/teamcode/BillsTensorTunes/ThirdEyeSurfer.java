@@ -118,26 +118,30 @@ public class ThirdEyeSurfer {
                 .build();
     }
 
-    public double orderUp(){
+    // Does a tfod scan for the smart stout
+    public Recognition orderUp(){
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
         double conf = 0;
         double maxConf = 0;
+        Recognition bestStout=null;
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
             conf = recognition.getConfidence();
-            if(conf > maxConf)
+            if(conf > maxConf) {
                 maxConf = conf;
+                bestStout = recognition;
+            }
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
         Log.e("ThirdEyeSurfer", "maxconf=" + maxConf + " size=" + currentRecognitions.size());
-        return maxConf;
+        return bestStout;
     }
 
     public void aprilTagScanOn(){
@@ -226,19 +230,19 @@ public class ThirdEyeSurfer {
 
     }   // end method telemetryTfod()
 
-    public double frontScan(){
+    public Recognition frontScan(){
         switchToForwardCamera();
         tfodScanOn();
-        double conf = orderUp();
+        Recognition conf = orderUp();
         ignoreCameras();
         tfodScanOff();
         return conf;
     }
 
-    public double backScan(){
+    public Recognition backScan(){
         switchToBackCamera();
         tfodScanOn();
-        double conf = orderUp();
+        Recognition conf = orderUp();
         ignoreCameras();
         tfodScanOff();
         return conf;

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.sequencer;
 
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
+import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
@@ -180,5 +181,64 @@ public class GameField {
 
     public static Vector2D betweenTiles(int xa, int ya, int xb, int yb){
         return centerOfTile(xa, ya).add(centerOfTile(xb, yb)).divideBy(2.0);
+    }
+
+    // center of the robot is 5" behind the pushed pixel
+    public final static double PIXEL_DIST = 5.0;
+    public static Vector2D leftSpike(Cadbot cadbot){
+        if(cadbot.allianceColor == AllianceColor.RED){
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D(-46.5, -30.0);
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
+        else{ // BLUE
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D();
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
+    }
+
+    public static Vector2D rightSpike(Cadbot cadbot){
+        if(cadbot.allianceColor == AllianceColor.RED){
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D(-24.5, -30.0);
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
+        else{ // BLUE
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D();
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
+    }
+
+    public static Vector2D centerSpike(Cadbot cadbot){
+        if(cadbot.allianceColor == AllianceColor.RED){
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D(-35.5, -24.5);
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
+        else{ // BLUE
+            if(cadbot.alliancePosition == AlliancePosition.LEFT){
+                return new Vector2D();
+            }
+            else{ // RIGHT
+                return new Vector2D();
+            }
+        }
     }
 }
