@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.sequencer.actions.RotateTo;
 import org.firstinspires.ftc.teamcode.sequencer.actions.ScanBackwardForTagLocation;
 import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForSmartStout;
 import org.firstinspires.ftc.teamcode.sequencer.actions.ScanForwardForTagLocation;
+import org.firstinspires.ftc.teamcode.sequencer.actions.Wait;
 
 /**
  * This class allows an elegant way to construct an action sequence.
@@ -117,6 +118,11 @@ public class SequenceBuilder {
 
     public SequenceBuilder gripperPush(double seconds, boolean push){
         sequence.add(new GripperPush(cadbot, seconds, push));
+        return this;
+    }
+
+    public SequenceBuilder wait(double duration){
+        sequence.add(new Wait(cadbot, duration));
         return this;
     }
 

@@ -177,4 +177,8 @@ public class GameField {
     public static Vector2D centerOfTile(int x, int y){
         return new Vector2D((x-3)*TILE_SIZE - HALF_TILE_SIZE, (y-3)*TILE_SIZE - HALF_TILE_SIZE);
     }
+
+    public static Vector2D betweenTiles(int xa, int ya, int xb, int yb){
+        return centerOfTile(xa, ya).add(centerOfTile(xb, yb)).divideBy(2.0);
+    }
 }

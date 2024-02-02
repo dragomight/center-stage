@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 
-public class GripperPush implements RobotAction{
-
+public class Wait implements RobotAction{
     private boolean done = false;
     private double duration;
     private boolean push = false; // false is pull
@@ -13,10 +12,9 @@ public class GripperPush implements RobotAction{
     private ElapsedTime runtime = new ElapsedTime();
     private boolean firstTime = true;
 
-    public GripperPush(Cadbot cadbot, double duration, boolean push){
+    public Wait(Cadbot cadbot, double duration){
         this.cadbot = cadbot;
         this.duration = duration;
-        this.push = push;
     }
 
     @Override
@@ -24,14 +22,11 @@ public class GripperPush implements RobotAction{
         if(firstTime){
             runtime.reset();
             firstTime = false;
-            if(push)
-                cadbot.motorPool.setGripperPush();
-            else
-                cadbot.motorPool.setGripperPull();
+            // start something
         }
         else{
             if(runtime.seconds() > duration){
-                cadbot.motorPool.setGripperStop();
+                // end something
                 done = true;
             }
         }

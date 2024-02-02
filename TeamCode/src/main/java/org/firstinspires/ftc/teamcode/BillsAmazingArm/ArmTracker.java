@@ -15,6 +15,8 @@ public class ArmTracker {
     private Cadbot cadbot;
     private MotorPool motorPool;
 
+    public final static double SERVO_CONV = Math.PI*300/180;
+
     public ArmTracker(Cadbot cadbot){
         this.cadbot = cadbot;
         this.motorPool = cadbot.motorPool;
@@ -54,28 +56,20 @@ public class ArmTracker {
         motorPool.setJoint1TicksPerSecond(targetVelocity.th1);
         motorPool.setJoint2TicksPerSecond(targetVelocity.th2);
         motorPool.setRockJointPosition(convertRangeToServo(targetVelocity.th3)); // move the servos to position like normally
-        motorPool.setRollJointPosition(convertRangeToServo(targetVelocity.th4));
+        motorPool.setRollJointPosition(convertRangeToServo(targetVelocity.th4)); // these are not actually velocities
     }
 
-    // Converts the input number from the range [-PI/2, PI/2] to the range [0.0, 1.0]
+    // Converts the input number from the range [-PI/2, PI/2] to the range [0.0, 1.0] should be 300deg not 180
     public double convertRangeToServo(double input){
-        return input/Math.PI + 0.5;
+        return input/SERVO_CONV + 0.5;
     }
 
     public double convertRangeFromServo(double input){
-        return (input - 0.5) * Math.PI;
+        return (input - 0.5) * SERVO_CONV;
     }
 
     public static double ticksToRadians(double ticks){
         return ticks * ArmConstants.RADIANS_PER_TICK;
-    }
-
-    public static double ticksToDegrees(double ticks) {
-        return ticks * ArmConstants.DEGREES_PER_TICK;
-    }
-
-    public static int degreesToTicks(double degrees) {
-        return (int)(degrees * ArmConstants.DEGREES_PER_TICK);
     }
 
     public boolean exceedsLimits(double omega1, double omega2, double avgDt){

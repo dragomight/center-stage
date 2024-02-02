@@ -89,8 +89,10 @@ public class MotorPool {
 
             joint2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            joint1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            joint1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            joint1.setPower(0.0);
+            joint2.setPower(0.0);
         }
         catch (Exception e) {
             Log.e("MotorPool: initialize", "Arm dc motors failed to initialize");
@@ -110,15 +112,14 @@ public class MotorPool {
         }
 
         try{
-            gripperBottom = hardwareMap.get(CRServo.class, "GripperBottom");
-            gripperTop = hardwareMap.get(CRServo.class, "GrippperTop");
+            gripperBottom = hardwareMap.get(CRServo.class, "GripA");
+            gripperTop = hardwareMap.get(CRServo.class, "GripB");
             rock = hardwareMap.get(Servo.class, "Rock");
             roll = hardwareMap.get(Servo.class, "Roll");
 
         }
         catch (Exception e) {
-            System.out.println("Servos failed to initialize");
-            Log.e("MotorPool", "Gripper servo motors failed to initialize");
+            Log.e("MotorPool", "Gripper servos failed to initialize");
             Log.e("MotorPool", e.toString());
             gripperOnline = false;
         }
@@ -209,6 +210,7 @@ public class MotorPool {
             gripperBottom.setDirection(DcMotorSimple.Direction.REVERSE);
             gripperBottom.setPower(0.0);
         }
+        Log.e("MotorPool", "setGripperStop");
     }
 
     public void setGripperPush(){
@@ -218,6 +220,7 @@ public class MotorPool {
             gripperBottom.setDirection(DcMotorSimple.Direction.REVERSE);
             gripperBottom.setPower(1.0);
         }
+        Log.e("MotorPool", "setGripperPush");
     }
 
     public void setGripperPull(){
@@ -227,6 +230,7 @@ public class MotorPool {
             gripperBottom.setDirection(DcMotorSimple.Direction.FORWARD);
             gripperBottom.setPower(1.0);
         }
+        Log.e("MotorPool", "setGripperPull");
     }
 
     public void setDrivePower(double leftFront, double rightFront, double rightBack, double leftBack){

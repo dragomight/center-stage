@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration.ArmTests;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration.GripperTests;
 
 public class SequenceLibrary {
 
@@ -42,11 +44,7 @@ public class SequenceLibrary {
     }
 
     public ActionSequence redLeft(){
-        return armCalibrationTest();
-//        return new SequenceBuilder(cadbot)
-//                .driveTo(centerOfTile(2,2), Math.toRadians(90))
-//                .scanForSmartStout(SpikeMark.MIDDLE)
-//                .build();
+        return ArmTests.armTest1(cadbot);
     }
 
     public ActionSequence redRight(){
@@ -67,13 +65,6 @@ public class SequenceLibrary {
                 .rotateTo(0, 0, Math.toRadians(-90))
                 .rotateTo(0, 0, Math.toRadians(180))
                 .rotateTo(0, 0, Math.toRadians(90))
-                .build();
-    }
-
-    public ActionSequence armCalibrationTest(){
-        return new SequenceBuilder(cadbot)
-                .gripperPush(0.3, true)
-//                .moveArmTo(new ArmPoseXZ(0, 0, 0, 0))
                 .build();
     }
 
