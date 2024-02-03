@@ -34,9 +34,6 @@ public class GameField {
     public final static double TILE_SIZE = 23.75; // inches
     public final static double HALF_TILE_SIZE = TILE_SIZE/2.0; // in
 
-    // positions in front of the back drop
-    public final static Vector2D BLUE_BACKDROP = new Vector2D(TILE_SIZE * 2 + 4, -TILE_SIZE * 1.5);
-    public final static Vector2D RED_BACKDROP = new Vector2D(TILE_SIZE * 2 + 4, TILE_SIZE * 1.5);
 
     public final static double BACKDROP_ANGLE = Math.toRadians(60.0); // angle from floor, can be 62.0
     public final static double COS_BDA = Math.cos(BACKDROP_ANGLE);
@@ -68,6 +65,14 @@ public class GameField {
         }
         double z = hyp * SIN_BDA;
         return new Vector3D(x, y, z);
+    }
+
+    public static Vector2D redBackdrop(){
+        return new Vector2D(TILE_SIZE * 2 + 3, -TILE_SIZE * 1.5);
+    }
+
+    public static Vector2D blueBackdrop(){
+        return new Vector2D(TILE_SIZE * 2 + 3, TILE_SIZE * 1.5);
     }
 
     /**
@@ -191,15 +196,15 @@ public class GameField {
                 return new Vector2D(-46.5, -30.0);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(1.0, -30.0);
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-                return new Vector2D();
+                return new Vector2D(24.0, 30.0);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(-24.0, 30.0);
             }
         }
     }
@@ -210,15 +215,15 @@ public class GameField {
                 return new Vector2D(-24.5, -30.0);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(24.5, -30.0);
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-                return new Vector2D();
+                return new Vector2D(1.0, 30.0);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(-46.5, 30.0);
             }
         }
     }
@@ -229,15 +234,15 @@ public class GameField {
                 return new Vector2D(-35.5, -24.5);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(12, -24.5);
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-                return new Vector2D();
+                return new Vector2D(12, 24.5);
             }
             else{ // RIGHT
-                return new Vector2D();
+                return new Vector2D(-35.5, 24.5);
             }
         }
     }

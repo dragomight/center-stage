@@ -230,6 +230,7 @@ public class ThirdEyeSurfer {
 
     }   // end method telemetryTfod()
 
+    // tfod scan with front camera
     public Recognition frontScan(){
         switchToForwardCamera();
         tfodScanOn();
@@ -239,6 +240,7 @@ public class ThirdEyeSurfer {
         return conf;
     }
 
+    // tfod scan from back camera
     public Recognition backScan(){
         switchToBackCamera();
         tfodScanOn();
@@ -249,26 +251,30 @@ public class ThirdEyeSurfer {
     }
 
     public Vector2D1 scanForwardForTagLocation(){
-        switchToForwardCamera();
-        aprilTagScanOn();
-        // todo: scan
-        Vector2D1 pose = scanForTagLocation();
-        ignoreCameras();
-        aprilTagScanOff();
+        Vector2D1 pose = null;
+        try {
+            switchToForwardCamera();
+            aprilTagScanOn();
+            pose = scanForTagLocationFront();
+            ignoreCameras();
+            aprilTagScanOff();
+        }
+        catch (Exception e){
+            Log.e("ThirdEyeSurfer", "Null", e);
+        }
         return pose;
     }
 
     public Vector2D1 scanBackwardForTagLocation(){
         switchToBackCamera();
         aprilTagScanOn();
-        // todo: scan
-        Vector2D1 pose = scanForTagLocation();
+        Vector2D1 pose = scanForTagLocationBack();
         ignoreCameras();
         aprilTagScanOff();
         return pose;
     }
 
-    private Vector2D1 scanForTagLocation(){
+    private Vector2D1 scanForTagLocationFront(){
 
         Vector2D1 pose = null;
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -281,6 +287,8 @@ public class ThirdEyeSurfer {
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
                 telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                 telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                pose = TagTransformer.robotPoseFromFrontCamera(detection.id, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.yaw);
+                Log.e("ThirdEyeSurfer", "Tag:" + detection.id + "  pose=" + pose);
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
@@ -293,7 +301,38 @@ public class ThirdEyeSurfer {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
         // convert the pose from camera coordinates to world coordinates of the camera, using the tag's id
-        // todo: cadbot.gameField.robotLocationOnFieldFromTag();
+
+        return pose;
+    }
+
+    private Vector2D1 scanForTagLocationBack(){
+
+        Vector2D1 pose = null;
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        telemetry.addData("# AprilTags Detected", currentDetections.size());
+
+        // Step through the list of detections and display info for each one.
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                pose = TagTransformer.robotPoseFromBackCamera(detection.id, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.yaw);
+                Log.e("ThirdEyeSurfer", "Tag:" + detection.id + "  pose=" + pose);
+            } else {
+                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
+            }
+        }   // end for() loop
+
+        // Add "key" information to telemetry
+        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
+        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+        telemetry.addLine("RBE = Range, Bearing & Elevation");
+
+        // convert the pose from camera coordinates to world coordinates of the camera, using the tag's id
+
         return pose;
     }
 

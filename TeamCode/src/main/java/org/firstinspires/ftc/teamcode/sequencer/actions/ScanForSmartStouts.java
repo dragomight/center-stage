@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.ThirdEyeSurfer;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
-import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
-import org.firstinspires.ftc.teamcode.sequencer.sequences.redleft.RedLeft;
-
-import java.util.List;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueRight;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedRight;
 
 public class ScanForSmartStouts implements RobotAction{
 
@@ -87,15 +87,15 @@ public class ScanForSmartStouts implements RobotAction{
                 cadbot.autoPilot.sequenceDirector.addSequence(RedLeft.leftSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(RedRight.leftSpike(cadbot));
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueLeft.leftSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueRight.leftSpike(cadbot));
             }
         }
     }
@@ -106,15 +106,15 @@ public class ScanForSmartStouts implements RobotAction{
                 cadbot.autoPilot.sequenceDirector.addSequence(RedLeft.rightSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(RedRight.rightSpike(cadbot));
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueLeft.rightSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueRight.rightSpike(cadbot));
             }
         }
     }
@@ -125,15 +125,15 @@ public class ScanForSmartStouts implements RobotAction{
                 cadbot.autoPilot.sequenceDirector.addSequence(RedLeft.middleSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(RedRight.middleSpike(cadbot));
             }
         }
         else{ // BLUE
             if(cadbot.alliancePosition == AlliancePosition.LEFT){
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueLeft.middleSpike(cadbot));
             }
             else{ // RIGHT
-
+                cadbot.autoPilot.sequenceDirector.addSequence(BlueRight.middleSpike(cadbot));
             }
         }
     }

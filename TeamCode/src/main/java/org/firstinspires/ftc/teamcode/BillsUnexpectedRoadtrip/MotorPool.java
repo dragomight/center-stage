@@ -183,6 +183,14 @@ public class MotorPool {
             rock.setPosition(pos);
     }
 
+    public void setJoint1Position(int ticks){
+        joint1.setTargetPosition(ticks);
+    }
+
+    public void setJoint2Position(int ticks){
+        joint2.setTargetPosition(ticks);
+    }
+
     public void setRollJointPosition(double pos){
         if(gripperOnline)
             roll.setPosition(pos);

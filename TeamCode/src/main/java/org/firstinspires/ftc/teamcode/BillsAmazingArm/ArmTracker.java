@@ -72,10 +72,19 @@ public class ArmTracker {
         return ticks * ArmConstants.RADIANS_PER_TICK;
     }
 
+    public static int radiansToTicks(double radians){
+        return (int) (radians / ArmConstants.RADIANS_PER_TICK);
+    }
+
     public boolean exceedsLimits(double omega1, double omega2, double avgDt){
         double th1Next = pose.th1 + omega1 * avgDt;
         double th2Next = pose.th2 + omega2 * avgDt;
         return th1Next > ArmConstants.TH1MAX || th1Next < ArmConstants.TH1MIN ||
                 th2Next > ArmConstants.TH2MAX || th2Next < ArmConstants.TH2MIN;
+    }
+
+    public void setPosition(double radians1, double radians2){
+        motorPool.setJoint1Position(ArmTracker.radiansToTicks(radians1));
+        motorPool.setJoint2Position(ArmTracker.radiansToTicks(radians2));
     }
 }

@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.sequencer.sequences.redleft;
+package org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous;
 
-import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.sequencer.ActionSequence;
 import org.firstinspires.ftc.teamcode.sequencer.GameField;
@@ -21,7 +20,8 @@ public class RedLeft {
                 .driveTo(-58.0, -48.0, Math.toRadians(90)) // strafe toward wall
                 .driveTo(GameField.centerOfTile(1,3), Math.toRadians(90)) // forward to the center
                 .rotateTo(GameField.centerOfTile(1,3), Math.toRadians(0)) // rotate to face the backdrop
-                .driveTo(GameField.centerOfTile(5, 3), Math.toRadians(0)) // forward down the center
+                .driveTo(GameField.centerOfTile(6, 3), Math.toRadians(0)) // forward down the center
+//                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
 
@@ -32,7 +32,8 @@ public class RedLeft {
                 .driveTo(GameField.rightSpike(cadbot).add(-5.0, -5.0), Math.toRadians(0)) // drive to spike
                 .driveTo(GameField.centerOfTile(2,2), Math.toRadians(0)) // backup
                 .driveTo(GameField.centerOfTile(2, 3), Math.toRadians(0)) // strafe to center isle
-                .driveTo(GameField.centerOfTile(5, 3), Math.toRadians(0)) // forward down the center
+                .driveTo(GameField.centerOfTile(6, 3), Math.toRadians(0)) // forward down the center
+//                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
 
@@ -43,9 +44,10 @@ public class RedLeft {
                 .driveTo(-58.0, -48.0, Math.toRadians(90)) // strafe toward wall
                 .driveTo(GameField.centerOfTile(1,3), Math.toRadians(90)) // forward to the center
                 .rotateTo(GameField.centerOfTile(1,3), Math.toRadians(0)) // rotate to face the backdrop
-                .driveTo(GameField.centerOfTile(5, 3), Math.toRadians(0)) // forward down the center
+                .driveTo(GameField.centerOfTile(6, 3), Math.toRadians(0)) // forward down the center
+//                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
 
-    
+
 }

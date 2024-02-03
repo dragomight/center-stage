@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.sequencer;
 
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
-import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
-import org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration.ArmTests;
-import org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration.GripperTests;
-import org.firstinspires.ftc.teamcode.sequencer.sequences.redleft.RedLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueRight;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedRight;
 
 public class SequenceLibrary {
 
@@ -24,24 +24,18 @@ public class SequenceLibrary {
     }
 
     public ActionSequence blueLeft(){
-        return new SequenceBuilder(cadbot)
-                .driveTo(centerOfTile(2, 5), Math.toRadians(-90))
-                .build();
+        return BlueLeft.start(cadbot);
     }
 
     public ActionSequence blueRight(){
-//        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(2, 5), Math.toRadians(-90))));
-//        actionSequence.add(new RotateTo(cadbot, new Vector2D1(centerOfTile(2, 5), Math.toRadians(0))));
-//        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(5, 5), Math.toRadians(0))));
-//        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(5, 4), Math.toRadians(0))));
-//        actionSequence.add(new DriveTo(cadbot, new Vector2D1(centerOfTile(6, 4), Math.toRadians(0))));
-        return new SequenceBuilder(cadbot)
-                .driveTo(centerOfTile(2, 5), Math.toRadians(-90))
-                .rotateTo(centerOfTile(2,  5),Math.toRadians(0))
-                .driveTo(centerOfTile(5, 5),Math.toRadians(0))
-                .driveTo(centerOfTile(5, 4),Math.toRadians(0))
-                .driveTo(centerOfTile(6, 4),Math.toRadians(0))
-                .build();
+        return BlueRight.start(cadbot);
+//        return new SequenceBuilder(cadbot)
+//                .driveTo(centerOfTile(2, 5), Math.toRadians(-90))
+//                .rotateTo(centerOfTile(2,  5),Math.toRadians(0))
+//                .driveTo(centerOfTile(5, 5),Math.toRadians(0))
+//                .driveTo(centerOfTile(5, 4),Math.toRadians(0))
+//                .driveTo(centerOfTile(6, 4),Math.toRadians(0))
+//                .build();
     }
 
     public ActionSequence redLeft(){
@@ -50,7 +44,13 @@ public class SequenceLibrary {
     }
 
     public ActionSequence redRight(){
-        return new SequenceBuilder(cadbot).build();
+        return RedRight.start(cadbot);
+//        return new SequenceBuilder(cadbot)
+//                .rotateTo(GameField.centerOfTile(4,1), Math.toRadians(0.0)) // rotate to backdrop
+//                .driveTo(GameField.redBackdrop(), Math.toRadians(0.0))  // drive to backdrop
+//                .scanForwardForLocation() // testing scan for location... works but not to be used
+//                .moveArmTo(ArmPoseXZ.ready())
+//                .build();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +117,10 @@ public class SequenceLibrary {
         // get backdrop location
         Vector2D backdrop; // a vector to the backdrop location
         if(cadbot.allianceColor == AllianceColor.BLUE){
-            backdrop = GameField.BLUE_BACKDROP;
+            backdrop = GameField.blueBackdrop();
         }
         else{ // RED
-            backdrop = GameField.RED_BACKDROP;
+            backdrop = GameField.redBackdrop();
         }
 
         // build the sequence, assumes we already facing and near to the center of the backdrop
