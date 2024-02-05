@@ -12,7 +12,7 @@ public class ArmConstants {
     public final static double TH1MIN = Math.toRadians(-90.0); // base joint angle
     public final static double TH1MAX = Math.toRadians(90.0);
     public final static double TH1HOME = Math.toRadians(-90.0);
-    public final static double TH2MIN = Math.toRadians(-180.0); // elbow joint angle
+    public final static double TH2MIN = Math.toRadians(-90.0); // elbow joint angle
     public final static double TH2MAX = Math.toRadians(180.0);
     public final static double TH2HOME = Math.toRadians(180.0);
     public final static double TH3MIN = Math.toRadians(-45.0); // the servo motor or wrist joint
@@ -41,8 +41,8 @@ public class ArmConstants {
                                     + 60*2      // Servo motor x4
                                     + 21*2      // 3x7 grid plate x2
                                     + 20;       // printed gripper, belts
-    public final static double BACKLASH1 = -16.7;
-    public final static double BACKLASH2 = 17.0;
+    public final static double BACKLASH1 = Math.toRadians(-16.7); // backlash of joint 1
+    public final static double BACKLASH2 = Math.toRadians(17.0); // backlash of joint 2
 
     // MOTOR CONSTANTS
     public static final double TICK_PER_REV = 5281.1;
