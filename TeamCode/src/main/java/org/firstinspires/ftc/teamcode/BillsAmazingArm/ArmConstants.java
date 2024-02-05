@@ -22,6 +22,28 @@ public class ArmConstants {
     public final static double TH4MAX = Math.toRadians(90.0);
     public final static double TH4HOME = Math.toRadians(0.0);
 
+    // BACKLASH CONSTANTS
+    public final static double CM1 = L1*2.0/3.0; // in, length from joint to center of mass of the segment 1
+    public final static double CM2 = L2/2.0;
+    public final static double CM3 = L3/2.0;
+    public final static double M1 = 98.0*2      // 11 Hole U-channel x2
+                                    + 524       // High torque DC motor
+                                    + 15.0*2    // Pattern mount x2
+                                    + 23*2      // Bevel gear x2
+                                    + 22        // Axle
+                                    + 14;       // Sonic Hub
+    public final static double M2 = 50.0        // 5 Hole C-channel
+                                    + 35        // 1 Hole U-channel
+                                    + 114       // 13 Hole Low Side U-channel
+                                    + 50        // hook, just guessing
+                                    + 15*2;     // Pattern mount x2
+    public final static double M3 =  35 + 44    // Light Servo block x2
+                                    + 60*2      // Servo motor x4
+                                    + 21*2      // 3x7 grid plate x2
+                                    + 20;       // printed gripper, belts
+    public final static double BACKLASH1 = -16.7;
+    public final static double BACKLASH2 = 17.0;
+
     // MOTOR CONSTANTS
     public static final double TICK_PER_REV = 5281.1;
     public static final double TICKS_PER_DEGREE = TICK_PER_REV/360.0;

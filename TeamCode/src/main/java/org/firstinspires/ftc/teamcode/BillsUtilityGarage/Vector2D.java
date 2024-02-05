@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.BillsUtilityGarage;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmConstants;
+
 public class Vector2D {
     private double x;
     private double y;
@@ -141,5 +143,19 @@ public class Vector2D {
         if (magnitude() > max) {
             set(unitVector().multiplyBy(max));
         }
+    }
+
+    public static Vector2D weightedAverage(Vector2D v1, double w1, Vector2D v2, double w2) {
+        return v1.copy().multiplyBy(w1).add(v2.copy().multiplyBy(w2)).divideBy(2.0);
+    }
+
+    public Vector2D setX(double x){
+        this.x = x;
+        return this;
+    }
+
+    public Vector2D setY(double y){
+        this.y = y;
+        return this;
     }
 }

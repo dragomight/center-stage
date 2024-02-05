@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.BillsAmazingArm;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.MotorPool;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UtilityKit;
+import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 
 /**
  * The arm tracker, records and updates the target position and velocity of the arm.
@@ -86,13 +87,18 @@ public class ArmController {
     // it then relays the position to the MotorPool
     public void setTargetPosition(double radians1, double radians2, double radians3, double radians4){
 
+        // limit the target to be within the valid range of motion
         targetPose.th1 = UtilityKit.limitToRange(radians1, ArmConstants.TH1MIN, ArmConstants.TH1MAX);
         targetPose.th2 = UtilityKit.limitToRange(radians2, ArmConstants.TH2MIN, ArmConstants.TH2MAX);
         targetPose.th3 = UtilityKit.limitToRange(radians3, ArmConstants.TH3MIN, ArmConstants.TH3MAX);
         targetPose.th4 = UtilityKit.limitToRange(radians4, ArmConstants.TH4MIN, ArmConstants.TH4MAX);
 
-        motorPool.setJointPositions(ArmController.radiansToTicks(targetPose.th1 - ArmConstants.TH1HOME),
-                                    ArmController.radiansToTicks(targetPose.th2 - ArmConstants.TH2HOME));
+        // correct for backlash
+        Vector2D correction = BacklashCorrection.getCorrection(targetPose);
+
+        // send the results to the motor pool
+        motorPool.setJointPositions(ArmController.radiansToTicks(targetPose.th1 - ArmConstants.TH1HOME + correction.getX()),
+                                    ArmController.radiansToTicks(targetPose.th2 - ArmConstants.TH2HOME + correction.getY()));
         motorPool.setRockJointPosition(convertRangeToServo(targetPose.th3));
         motorPool.setRollJointPosition(convertRangeToServo(targetPose.th4));
     }
