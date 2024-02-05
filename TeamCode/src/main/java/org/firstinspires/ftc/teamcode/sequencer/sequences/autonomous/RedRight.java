@@ -22,6 +22,8 @@ public class RedRight {
                 .rotateTo(GameField.centerOfTile(5, 2), Math.toRadians(0))
                 .driveTo(GameField.centerOfTile(5, 1), Math.toRadians(0)) // park
                 .driveTo(GameField.centerOfTile(6, 1), Math.toRadians(0)) // park
+                .gripperPush(2.0, true)
+                .driveTo(GameField.centerOfTile(6, 1).add(-3,0), Math.toRadians(0)) // park
                 .build();
     }
 
@@ -31,6 +33,8 @@ public class RedRight {
                 .driveTo(GameField.betweenTiles(4, 1, 5, 1), Math.toRadians(90)) // backup
                 .rotateTo(GameField.betweenTiles(4, 1, 5, 1), Math.toRadians(0)) // turn to board
                 .driveTo(GameField.centerOfTile(6, 1), Math.toRadians(0)) // park
+                .gripperPush(2.0, true)
+                .driveTo(GameField.centerOfTile(6, 1).add(-3,0), Math.toRadians(0)) // park
                 .build();
     }
 
@@ -40,6 +44,8 @@ public class RedRight {
                 .driveTo(GameField.centerOfTile(4, 1), Math.toRadians(90)) // backup
                 .rotateTo(GameField.centerOfTile(4, 1), Math.toRadians(0)) // turn to board
                 .driveTo(GameField.centerOfTile(6, 1), Math.toRadians(0)) // park
+                .gripperPush(2.0, true)
+                .driveTo(GameField.centerOfTile(6, 1).add(-3,0), Math.toRadians(0)) // park
                 .build();
     }
 

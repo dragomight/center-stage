@@ -4,12 +4,12 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPose;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.ControlType;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UtilityKit;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
-import org.firstinspires.ftc.teamcode.BillsYarm.Yoint;
 import org.firstinspires.ftc.teamcode.sequencer.GameField;
 
 public class GamePadController {
@@ -52,19 +52,19 @@ public class GamePadController {
             // use joystick to indicate field coordinates
             double x, y;
             if(cadbot.allianceColor == AllianceColor.RED){
-                x = -lateral;
-                y = axial;
-            }
-            else{
                 x = lateral;
                 y = -axial;
+            }
+            else{
+                x = -lateral;
+                y = axial;
             }
 
             // get the most recent pose
             Vector2D1 currentPose = cadbot.deadWheelTracker.getPose();
 
             // transform that vector to robot coordinates
-            Vector2D toTargetRobotCoords = GameField.fieldToRobot(new Vector2D(x, y), currentPose.getHeading());
+            Vector2D toTargetRobotCoords = GameField.fieldToRobot(new Vector2D(x, y), -currentPose.getHeading());
 
             // if yaw is zero, attempt to maintain the preferred heading
             if(yaw == 0) {
@@ -101,34 +101,64 @@ public class GamePadController {
             Log.e("GamePadController", "topSpeed=" + cadbot.deadWheelTracker.topSpeed + "   topAccel=" + cadbot.deadWheelTracker.topAcceleration);
         }
 
-        //Arm control
-        if (gamepad1.right_trigger > 0.1) {
-            cadbot.yarm.tilt = true;
-        }
-        else {
-            cadbot.yarm.tilt = false;
-        }
-        cadbot.yarm.launch = gamepad1.y;
+        // Drone Launcher
+//        if (gamepad1.right_trigger > 0.1) {
+//            cadbot.yarm.tilt = true;
+//        }
+//        else {
+//            cadbot.yarm.tilt = false;
+//        }
+//        cadbot.yarm.launch = gamepad1.y;
+//
+//        //cadbot.telemetry.addData("Tilt ", cadbot.yarm.tilt);
+//        //cadbot.telemetry.addData("Launch ", cadbot.yarm.launch);
+//
+//        if (gamepad1.dpad_up) { // Ready position
+//            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(-65);
+//            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-170);
+//        }
+//
+//        if (gamepad1.dpad_right) { // Pull
+//            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(60);
+//            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-90);
+//        }
+//
+//        if (gamepad1.dpad_down) { // Fold
+//            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(5);
+//            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-5);
+//        }
+//
+//        cadbot.telemetry.addData("Joint1 ", cadbot.yarm.joint1TickTarget);
+//        cadbot.telemetry.addData("Joint2 ", cadbot.yarm.joint2TickTarget);
 
-        cadbot.telemetry.addData("Tilt ", cadbot.yarm.tilt);
-        cadbot.telemetry.addData("Launch ", cadbot.yarm.launch);
-
-        if (gamepad1.dpad_up) { // Ready position
-            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(-65);
-            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-170);
+        if (gamepad1.back) { // Reset orientation
+            cadbot.deadWheelTracker.resetPose(new Vector2D1(0, 0, 0));
         }
 
-        if (gamepad1.dpad_right) { // Pull
-            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(60);
-            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-90);
+        // Manual Mode Arm Controls
+        ArmPose p = cadbot.armController.getTargetPose();
+        double dTh1 = 0;
+        double dTh2 = 0;
+        double ink = Math.toRadians(1);; // degrees
+
+        if(gamepad1.a){
+            // increment joint1 position
+            dTh1 = ink;
+        }
+        if(gamepad1.b){
+            // increment joint1 position
+            dTh1 = -ink;
+        }
+        if(gamepad1.x){
+            // increment joint1 position
+            dTh2 = ink;
+        }
+        if(gamepad1.y){
+            // increment joint1 position
+            dTh2 = -ink;
         }
 
-        if (gamepad1.dpad_down) { // Fold
-            cadbot.yarm.joint1TickTarget = Yoint.degreesToTicks(5);
-            cadbot.yarm.joint2TickTarget = Yoint.degreesToTicks(-5);
-        }
-
-        cadbot.telemetry.addData("Joint1 ", cadbot.yarm.joint1TickTarget);
-        cadbot.telemetry.addData("Joint2 ", cadbot.yarm.joint2TickTarget);
+        cadbot.armController.setTargetPosition(p.th1 + dTh1, p.th2 + dTh2, 0, 0);
+        Log.e("GamePadController", "targetArmPose" + p);
     }
 }

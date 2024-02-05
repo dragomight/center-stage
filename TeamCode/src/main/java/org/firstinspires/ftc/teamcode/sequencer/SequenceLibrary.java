@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration.ArmTests;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueLeft;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueRight;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedLeft;
@@ -39,8 +40,8 @@ public class SequenceLibrary {
     }
 
     public ActionSequence redLeft(){
-        //return ArmTests.armTest1(cadbot);
-        return RedLeft.start(cadbot);
+        return ArmTests.armTest1(cadbot);
+        //return RedLeft.start(cadbot);
     }
 
     public ActionSequence redRight(){

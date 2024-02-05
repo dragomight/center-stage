@@ -15,7 +15,7 @@ public class ArmConstants {
     public final static double TH2MIN = Math.toRadians(-180.0); // elbow joint angle
     public final static double TH2MAX = Math.toRadians(180.0);
     public final static double TH2HOME = Math.toRadians(180.0);
-    public final static double TH3MIN = Math.toRadians(-90.0); // the servo motor or wrist joint
+    public final static double TH3MIN = Math.toRadians(-45.0); // the servo motor or wrist joint
     public final static double TH3MAX = Math.toRadians(90.0);
     public final static double TH3HOME = Math.toRadians(90.0);
     public final static double TH4MIN = Math.toRadians(-90.0); // the roll joint

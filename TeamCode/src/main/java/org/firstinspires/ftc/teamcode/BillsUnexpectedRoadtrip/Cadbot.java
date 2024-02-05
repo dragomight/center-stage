@@ -4,25 +4,20 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmTracker;
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmController;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsEs.ControlType;
-import org.firstinspires.ftc.teamcode.BillsSystemsForSpareChange.GamePadState;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.ThirdEyeSurfer;
-import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
-import org.firstinspires.ftc.teamcode.BillsYarm.Yarm;
-import org.firstinspires.ftc.teamcode.BillsYarm.YarmController;
 import org.firstinspires.ftc.teamcode.sequencer.AutoPilot;
-import org.firstinspires.ftc.teamcode.sequencer.GameField;
 
 public class Cadbot {
     public MotorPool motorPool;
     public DeadWheelTracker deadWheelTracker;
     public Telemetry telemetry;
 
-    public ArmTracker armTracker;
+    public ArmController armController;
 
     public MecanumController mecanumController;
     public HardwareMap hardwareMap;
@@ -30,9 +25,9 @@ public class Cadbot {
 
     public AutoPilot autoPilot;
 
-    public Yarm yarm;
-    public YarmController yarmController;
-    public GamePadState gamePadState1; // only used for yarm
+//    public Yarm yarm;
+//    public YarmController yarmController;
+//    public GamePadState gamePadState1; // only used for yarm
     public Gamepad gamepad1;
 
     public AllianceColor allianceColor = AllianceColor.RED;
@@ -58,7 +53,7 @@ public class Cadbot {
 
         mecanumController = new MecanumController(motorPool);
 
-        armTracker = new ArmTracker(this);
+        armController = new ArmController(this);
 
         gamePadController = new GamePadController();
         gamePadController.initialize(gamepad1, gamepad2, this);
@@ -66,12 +61,12 @@ public class Cadbot {
         autoPilot = new AutoPilot();
         autoPilot.initialize(this);
 
-        gamePadState1 = new GamePadState(); // only used for yarm
-        gamePadState1.initialize(telemetry);
+//        gamePadState1 = new GamePadState(); // only used for yarm
+//        gamePadState1.initialize(telemetry);
 
-        yarm = new Yarm();
-        yarmController = new YarmController();
-        yarmController.initialize(gamePadState1, yarm, telemetry);
+//        yarm = new Yarm();
+//        yarmController = new YarmController();
+//        yarmController.initialize(gamePadState1, yarm, telemetry);
 
         thirdEyeSurfer = new ThirdEyeSurfer();
         thirdEyeSurfer.initialize(this);
@@ -83,7 +78,6 @@ public class Cadbot {
         motorPool.ready();
         // update knowledge of position, heading, velocity, acceleration
         deadWheelTracker.update();
-        armTracker.update();
         // temp: get pose for testing
         //Vector2D1 poseEstimate = deadWheelTracker.getPose();
 
@@ -91,7 +85,7 @@ public class Cadbot {
         gamePadController.update();
 
         // update the arm
-        gamePadState1.update(gamepad1, false);
+//        gamePadState1.update(gamepad1, false);
         motorPool.update(this);
 
         // todo: change telemetry
@@ -110,7 +104,6 @@ public class Cadbot {
         // temp: get pose for testing
         //Vector2D1 poseEstimate = deadWheelTracker.getPose();
 
-        armTracker.update();
         // perform autonomous sequence
         autoPilot.update();
 

@@ -23,6 +23,7 @@ public class Kinematics {
         return new Vector2D(x, z);
     }
 
+    // returns the end point of the finger tip in robot coordinates.
     public static Vector2D tip(ArmPose pose){
         double x = 0;
         double z = 0;

@@ -26,4 +26,8 @@ public class ArmPose {
         sb.append(Math.toDegrees(th4) + "]");
         return sb.toString();
     }
+
+    public ArmPose copy(){
+        return new ArmPose(th1, th2, th3, th4);
+    }
 }

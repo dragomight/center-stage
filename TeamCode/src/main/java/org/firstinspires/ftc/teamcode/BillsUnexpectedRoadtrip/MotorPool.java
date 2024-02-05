@@ -81,8 +81,14 @@ public class MotorPool {
             joint1 = hardwareMap.get(DcMotorEx.class, "Joint1");
             joint2 = hardwareMap.get(DcMotorEx.class, "Joint2");
 
-            joint1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            joint2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            joint1.setTargetPosition(0);
+            joint2.setTargetPosition(0);
+
+//            joint1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            joint2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION); // todo: is this correct
 
             joint1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             joint2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -91,8 +97,8 @@ public class MotorPool {
 
 //            joint1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            joint1.setPower(0.0);
-            joint2.setPower(0.0);
+            joint1.setPower(0.1);
+            joint2.setPower(0.1);
         }
         catch (Exception e) {
             Log.e("MotorPool: initialize", "Arm dc motors failed to initialize");
@@ -101,8 +107,8 @@ public class MotorPool {
 
         try {
             launchMan = hardwareMap.get(Servo.class, "Launcher");
-            launchMan.setDirection(Servo.Direction.REVERSE);
             tiltMan = hardwareMap.get(Servo.class, "Tilter");
+            tiltMan.setDirection(Servo.Direction.REVERSE);
 
         }
         catch (Exception e) {
@@ -170,12 +176,11 @@ public class MotorPool {
         return joint2.getVelocity();
     }
 
-    public void setJoint1TicksPerSecond(double tps){
-        joint1.setVelocity(tps);
-    }
+    public void setJointsTicksPerSecond(double tps1, double tps2){
 
-    public void setJoint2TicksPerSecond(double tps){
-        joint2.setVelocity(tps);
+        joint1.setVelocity(tps1);
+        joint2.setVelocity(tps2);
+
     }
 
     public void setRockJointPosition(double pos){
@@ -183,12 +188,11 @@ public class MotorPool {
             rock.setPosition(pos);
     }
 
-    public void setJoint1Position(int ticks){
-        joint1.setTargetPosition(ticks);
-    }
-
-    public void setJoint2Position(int ticks){
-        joint2.setTargetPosition(ticks);
+    public void setJointPositions(int ticks1, int ticks2){
+        joint1.setTargetPosition(ticks1);
+        joint2.setTargetPosition(ticks2);
+        joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void setRollJointPosition(double pos){
@@ -262,18 +266,18 @@ public class MotorPool {
         //cadbot.yarmController.update(true);
 
         // SET THE DC MOTORS AND SERVOS
-        if (cadbot.yarm.launch) {
-            launchMan.setPosition(0.5);
-        }
-        else {
-            launchMan.setPosition(0);
-        }
-        if (cadbot.yarm.tilt) {
-            tiltMan.setPosition(60/300.0);
-        }
-        else {
-            tiltMan.setPosition(0);
-        }
+//        if (cadbot.yarm.launch) {
+//            launchMan.setPosition(0.5);
+//        }
+//        else {
+//            launchMan.setPosition(0);
+//        }
+//        if (cadbot.yarm.tilt) {
+//            tiltMan.setPosition(60/300.0);
+//        }
+//        else {
+//            tiltMan.setPosition(0);
+//        }
 
 //        cadbot.telemetry.addData("JT1 ", joint1.getCurrentPosition());
 //        cadbot.telemetry.addData("JT2 ", joint2.getCurrentPosition());

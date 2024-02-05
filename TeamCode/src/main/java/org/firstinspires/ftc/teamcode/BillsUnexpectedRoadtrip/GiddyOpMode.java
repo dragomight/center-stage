@@ -68,7 +68,7 @@ public class GiddyOpMode extends LinearOpMode{
         telemetry.update();
 
         cadbot.initialize(hardwareMap, telemetry, gamepad1, gamepad2);
-        writeToFile(cadbot.deadWheelTracker.getPose());
+        //writeToFile(cadbot.deadWheelTracker.getPose());
 
         waitForStart();
 
@@ -77,7 +77,7 @@ public class GiddyOpMode extends LinearOpMode{
         }
 
         // todo: store the current field pose for the driver op mode
-        writeToFile(cadbot.deadWheelTracker.getPose());
+//        writeToFile(cadbot.deadWheelTracker.getPose());
         cadbot.quit();
     }
 

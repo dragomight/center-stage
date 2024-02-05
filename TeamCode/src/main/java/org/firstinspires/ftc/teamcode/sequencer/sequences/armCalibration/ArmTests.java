@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.sequencer.ActionSequence;
+import org.firstinspires.ftc.teamcode.sequencer.GameField;
 import org.firstinspires.ftc.teamcode.sequencer.SequenceBuilder;
 
 public class ArmTests {
@@ -14,6 +15,8 @@ public class ArmTests {
     public static ActionSequence armTest1(Cadbot cadbot){
         return new SequenceBuilder(cadbot)
                 .moveArmTo(ArmPoseXZ.ready())
+              //  .moveArmTo(ArmPoseXZ.forward())
+              //  .moveArmTo(ArmPoseXZ.placeOnBackdrop(GameField.getBackdropPixelPosition(row, col)))
                 .build();
     }
 
