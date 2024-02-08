@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.BillsAmazingArm.Kinematics;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 
+import java.util.ArrayList;
+
 public class MoveArmTo implements RobotAction{
 
     private Cadbot cadbot;
@@ -36,7 +38,7 @@ public class MoveArmTo implements RobotAction{
 
         tipTarget = new Vector2D(targetArmPoseXZ.x, targetArmPoseXZ.z);
 
-        //InverseKinematics.test();
+        InverseKinematics.test2();
     }
 
     @Override
@@ -142,7 +144,15 @@ public class MoveArmTo implements RobotAction{
         // don't forget to remove the offset created by the location of the first joint, tip with no offset
         Vector2D tip = nextTipPose.copy().subtract(ArmConstants.L0x, ArmConstants.L0z);
         // use inverse kinematics to calculate the joint angles for that new position (and hope for the best)
-        Vector2D theta = InverseKinematics.theta(ArmConstants.L1, ArmConstants.L2, tipTarget.getX(), tipTarget.getY());
+        //ArrayList<Vector2D> results = InverseKinematics.theta(ArmConstants.L1, ArmConstants.L2, tipTarget.getX(), tipTarget.getY());
+        Vector2D theta = InverseKinematics.thetaExtended(
+                ArmConstants.L1,
+                ArmConstants.L2,
+                ArmConstants.L3,
+                targetArmPoseXZ.x - ArmConstants.L0x,
+                targetArmPoseXZ.z - ArmConstants.L0z,
+                targetArmPoseXZ.th3);
+//      Vector2D theta = new Vector2D();
         // create a velocity that will get us there (maybe)
         Vector2D thetaDot = new Vector2D(theta.getX() - pose.th1, theta.getY() - pose.th2); // that's confusing, next angle - last angle
         thetaDot.divideBy(avgDt);

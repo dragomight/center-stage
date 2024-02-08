@@ -36,12 +36,12 @@ public class ArmPoseXZ {
 
     // gets the home pose
     public static ArmPoseXZ home(){
-        return new ArmPoseXZ(5.0, 0.0, Math.toRadians(0.0), 0, Math.toRadians(0));
+        return new ArmPoseXZ(5.0, 0.0, Math.toRadians(0.0), 0, Math.toRadians(90));
     }
 
     // gets the ready pose (note it must be forward slightly of home or it is not physically realizable)
     public static ArmPoseXZ ready(){
-        return new ArmPoseXZ(5.5, 7.0, Math.toRadians(0.0), 0, Math.toRadians(0));
+        return new ArmPoseXZ(5.5, 7.0, Math.toRadians(0.0), 0, Math.toRadians(90));
     }
 
     public static ArmPoseXZ forward(){

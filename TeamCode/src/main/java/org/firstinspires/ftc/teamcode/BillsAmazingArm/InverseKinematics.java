@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UnitOfAngle;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UtilityKit;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 
+import java.util.ArrayList;
+
 public class InverseKinematics{
 
     /**
@@ -37,23 +39,71 @@ public class InverseKinematics{
         return new Vector2D(q1Dot, q2Dot);
     }
 
-    // made this work by reversing the x and y in functions
-    public static Vector2D theta(double l1, double l2, double x, double y){
-        double c2 = (x*x + y*y - l1*l1 - l2*l2)/(2 * l1 * l2);
-        if(Math.abs(c2)>1)
-            Log.e("InverseKinematics", "No solution");
-        if(c2 == 1)
-            return new Vector2D(Math.atan2(x, y), 0);
-        if(c2 == -1)
-            return new Vector2D(Math.atan2(x, y), Math.PI);
+    // We made this work by reversing the x and y in atan2 function calls, but why?
+    // x is the distance out in front of the robot
+    // z is the height above the floor
+    public static ArrayList<Vector2D> theta(double l1, double l2, double x, double z){
+        ArrayList<Vector2D> solutions = new ArrayList<>();
+        double c2 = (x*x + z*z - l1*l1 - l2*l2)/(2 * l1 * l2);
+        if(Math.abs(c2)>1) {
+            // The arm cannot reach this point
+            Log.e("InverseKinematics", "No solution" + " l1=" + l1 + " l2=" + l2 + " x=" + x + " z=" + z + " c2=" + c2);
+            return solutions;
+        }
+        if(c2 == 1){
+            solutions.add(new Vector2D(Math.atan2(x, z), 0));
+            return solutions;
+        }
+        if(c2 == -1) {
+            solutions.add(new Vector2D(Math.atan2(x, z), Math.PI));
+            return solutions;
+        }
+
+        // There remain two possible solutions (elbow up and elbow down) that can both reach (x, z)
         double q2 = Math.acos(c2);
-        double q1 = Math.atan2(x, y) - Math.atan2(l2 * Math.sin(q2), l1 + l2 * Math.cos(q2));
+        double q1 = Math.atan2(x, z) - Math.atan2(l2 * Math.sin(q2), l1 + l2 * Math.cos(q2));
         double q2b = -q2;
-        double q1b = Math.atan2(x, y) - Math.atan2(l2 * Math.sin(q2b), l1 + l2 * Math.cos(q2b));
+        double q1b = Math.atan2(x, z) - Math.atan2(l2 * Math.sin(q2b), l1 + l2 * Math.cos(q2b));
 //        Log.e("InverseKinematics", "qb=" + q1b + " " + q2b);
-        return new Vector2D(q1, q2);
+        solutions.add(new Vector2D(q1, q2));
+        solutions.add(new Vector2D(q1b, q2b));
+        return solutions;
     }
 
+    // given a finger tip point in (x, z) and th3, calculate the distance from j2 to tip,
+    // and the angle of this line relative to j2.  This imaginary arm segment may then be used
+    // to calculate the inverse kinematics for th1, th2i, which may then be used to get th2.
+    public static Vector2D thetaExtended(double l1, double l2, double l3, double x, double z, double th3){
+
+        // Use law of cosines to get the length of imaginary segment length l2i
+        // if th3 < 0 then use -180 - th3
+        double l2i = Math.sqrt(l2 * l2 + l3 * l3 - 2 * l2 * l3 * Math.cos(Math.PI - th3)); // todo
+
+        // Calculate the angle offset of th2i, the imaginary joint angle, relative to j2, using the law of sines
+        double th2offset = Math.asin( Math.sin(Math.PI - th3) * l3 / l2i ); // th2i will have the same sign as th3
+
+        // calculate the IK for the imaginary segment and segment 1
+        ArrayList<Vector2D> solutions = theta(l1, l2i, x, z);
+        if(solutions.isEmpty()){
+            Log.e("InverseKinematics", "No solution error.");
+            return new Vector2D(); // todo: should return something we can handle
+        }
+
+        // use the first solution when th3 >= 0, and the second otherwise
+        Vector2D theta;
+        if(th3 >= 0) {
+            theta = solutions.get(0).subtract(0, th2offset);
+        }
+        else{
+            theta = solutions.get(1).subtract(0, th2offset);
+        }
+
+        Log.e("InverseKinematics", "l2i=" + l2i + " th2offset=" + th2offset + " theta=" + theta);
+
+        return theta;
+    }
+
+    // This function serves as a test of the class and use case example
     public static void test(){
         double th1 = Math.toRadians(0);
         double th2 = Math.toRadians(0);
@@ -62,11 +112,63 @@ public class InverseKinematics{
         // calculate the end point in x, y
         Vector2D pose = Kinematics.j3(new ArmPose(th1, th2, 0, 0));
 
-        // remove the shift
+        // remove the shift of the base joint
         Vector2D copyPose = pose.copy().subtract(ArmConstants.L0x, ArmConstants.L0z);
 
-        Vector2D result = InverseKinematics.theta(ArmConstants.L1, ArmConstants.L2, copyPose.getX(), copyPose.getY());
+        ArrayList<Vector2D> results = InverseKinematics.theta(ArmConstants.L1, ArmConstants.L2, copyPose.getX(), copyPose.getY());
+        if(results.isEmpty()){
+            Log.e("InverseKinematics", "No results in test.");
+        }
+        else if(results.size() > 1){
+            Log.e("InverseKinematics", "original=" + original + " copyPose=" + copyPose + " extra-crispy=" + results.get(0));
+            Log.e("InverseKinematics", "original=" + original + " copyPose=" + copyPose + " extra-crispy=" + results.get(1));
+        }
+        else {
+            Log.e("InverseKinematics", "original=" + original + " copyPose=" + copyPose + " extra-crispy=" + results.get(0));
+        }
+    }
 
-        Log.e("InverseKinematics", "original=" + original + " copyPose=" + copyPose + " extra-crispy=" + result);
+    public static void test2(){
+        double th1 = Math.toRadians(0);
+        double th2 = Math.toRadians(0);
+        double th3 = Math.toRadians(-90);
+        Vector2D original = new Vector2D(th1, th2);
+
+        // calculate the end point in x, y
+        Vector2D tip = Kinematics.tip(new ArmPose(th1, th2, th3, 0));
+
+        // remove the shift of the base joint
+        Vector2D tipShifted = tip.copy().subtract(ArmConstants.L0x, ArmConstants.L0z);
+
+        Vector2D result = InverseKinematics.thetaExtended(ArmConstants.L1,
+                                                        ArmConstants.L2,
+                                                        ArmConstants.L3,
+                                                        tipShifted.getX(),
+                                                        tipShifted.getY(),
+                                                        th3);
+
+        Log.e("InverseKinematics", "original=" + original + " tip=" + tip + " tipMod=" + tipShifted + " extra-crispy=" + result);
+
+
+        th1 = Math.toRadians(0);
+        th2 = Math.toRadians(0);
+        th3 = Math.toRadians(90);
+        original = new Vector2D(th1, th2);
+
+        // calculate the end point in x, y
+        tip = Kinematics.tip(new ArmPose(th1, th2, th3, 0));
+
+        // remove the shift of the base joint
+        tipShifted = tip.copy().subtract(ArmConstants.L0x, ArmConstants.L0z);
+
+        result = InverseKinematics.thetaExtended(ArmConstants.L1,
+                ArmConstants.L2,
+                ArmConstants.L3,
+                tipShifted.getX(),
+                tipShifted.getY(),
+                th3);
+
+        Log.e("InverseKinematics", "original=" + original + " tip=" + tip + " tipMod=" + tipShifted + " extra-crispy=" + result);
+
     }
 }
