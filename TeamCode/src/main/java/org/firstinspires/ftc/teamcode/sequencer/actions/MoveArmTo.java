@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.sequencer.actions;
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmConstants;
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmControlMode;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPose;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmController;
+import org.firstinspires.ftc.teamcode.BillsAmazingArm.BacklashCorrection;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.InverseKinematics;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.Kinematics;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
@@ -29,6 +31,7 @@ public class MoveArmTo implements RobotAction{
     private Vector2D lastTipPose = new Vector2D();
     private Vector2D j3LastPose = new Vector2D();
     private Vector2D targetSpeed = new Vector2D();
+    private Vector2D j3Target;
     Vector2D j3Vel;
 
     public MoveArmTo(Cadbot cadbot, ArmPoseXZ targetArmPoseXZ){
@@ -37,13 +40,61 @@ public class MoveArmTo implements RobotAction{
         this.targetArmPoseXZ = targetArmPoseXZ;
 
         tipTarget = new Vector2D(targetArmPoseXZ.x, targetArmPoseXZ.z);
+        j3Target = targetArmPoseXZ.getJ3Target();
 
-        InverseKinematics.test2();
     }
 
     @Override
     public void update() {
-        // PHASE I: GET THE BASIC DATA
+        if(armController.getControlMode() == ArmControlMode.RUN_TO_POSITION){
+            runToPosition();
+        }
+        else{
+            runToVelocity();
+        }
+    }
+
+    public void runToPosition() {
+
+        // get the current arm pose (in angles)
+        pose = armController.getPose();
+
+        // calculate the position of joint 3
+        Vector2D j3Pose = Kinematics.j3(pose);
+
+        // get the to target vector for joint 3 to then calculate the distance to target
+        Vector2D j3ToTarget = j3Target.copy().subtract(j3Pose);
+        double distance = j3ToTarget.magnitude();
+
+        // Are we there yet?
+        if(distance < ArmConstants.DISTANCE_THRESHOLD){ // todo: this assumes the pose is reachable
+              done = true;
+            Log.e("MoveArmTo", "Action:MoveArmTo complete at d=" + distance ); //+ "   tipTarget=" + tipTarget + "   tipPose=" + tipPosition + "  tipVel=" + tipVel);
+        }
+
+        // calculate the target angles from the target (x, z)
+        ArrayList<Vector2D> sols = InverseKinematics.solveForTheta(
+                ArmConstants.L1,
+                ArmConstants.L2,
+                j3Target.getX() - ArmConstants.L0x,
+                j3Target.getY() - ArmConstants.L0z);
+        Vector2D theta = sols.get(0);
+
+        // Use the arm controller to set the motors to their target positions
+        armController.setTargetPosition(theta.getX(), theta.getY(), targetArmPoseXZ.getTh3(pose.th1, pose.th2), targetArmPoseXZ.th4);
+
+        Log.e("MoveArmTo",
+                "pose=" + pose
+                + " j3Target=" + j3Target
+                + " j3Pose=" + j3Pose
+                + " j3ToTarget=" + j3ToTarget
+                + " d=" + distance
+                + " th=" + Math.toDegrees(theta.getX()) + ", " + Math.toDegrees(theta.getY()));
+
+    }
+
+    // todo: fix this function
+    public void runToVelocity(){
         // get the time interval
         double dt = cadbot.deadWheelTracker.getTime();
         double avgDt = cadbot.deadWheelTracker.getAvgDt();
@@ -55,7 +106,7 @@ public class MoveArmTo implements RobotAction{
         Vector2D j3Pose = Kinematics.j3(pose); // home is 4.68, 7.75
 
         // Create a modified pose that has the current joint angles plus anticipated wrist angle
-        ArmPose poseMod = new ArmPose(pose.th1, pose.th2, targetArmPoseXZ.getWristAngle(pose), targetArmPoseXZ.th4);
+        ArmPose poseMod = new ArmPose(pose.th1, pose.th2, targetArmPoseXZ.getTh3(pose.th1, pose.th2), targetArmPoseXZ.th4);
 
         // Now we get the current tip position
         tipPosition = Kinematics.tip(poseMod);
@@ -151,7 +202,7 @@ public class MoveArmTo implements RobotAction{
                 ArmConstants.L3,
                 targetArmPoseXZ.x - ArmConstants.L0x,
                 targetArmPoseXZ.z - ArmConstants.L0z,
-                targetArmPoseXZ.th3);
+                targetArmPoseXZ.getTh3(pose.th1, pose.th2));
 //      Vector2D theta = new Vector2D();
         // create a velocity that will get us there (maybe)
         Vector2D thetaDot = new Vector2D(theta.getX() - pose.th1, theta.getY() - pose.th2); // that's confusing, next angle - last angle

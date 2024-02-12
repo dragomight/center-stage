@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BillsAmazingArm;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.MotorPool;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.UtilityKit;
@@ -13,13 +15,15 @@ import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 public class ArmController {
 
     // Independent variables
-    private ArmPose targetPose = new ArmPose(); // the current target position of the arm
-    private ArmPose targetVelocity = new ArmPose(); // the current target velocity (if applicable)
+    private ArmPose targetPose = new ArmPose(); // the current target position of the arm, where it is trying to move to
+    private ArmPose targetVelocity = new ArmPose(); // the current target velocity (if applicable, i.e. in run to velocity mode)
 
     private ArmControlMode controlMode = ArmControlMode.RUN_TO_POSITION;
 
     private Cadbot cadbot;
     private MotorPool motorPool;
+
+    private Vector2D correction = new Vector2D(); // the backlash correction in radians for th1 and th2
 
     public final static double SERVO_CONV = Math.PI*300/180;
 
@@ -27,13 +31,21 @@ public class ArmController {
         this.cadbot = cadbot;
         this.motorPool = cadbot.motorPool;
         resetHome();
+
+        Log.e("ArmController", ArmPoseXZ.report());
     }
 
+    // reset home specifies that the current motor position, which is the target, is the home position
+    // that way it is not trying to run to some other position yet.
     public void resetHome(){
         targetPose = new ArmPose(ArmConstants.TH1HOME,
                                 ArmConstants.TH2HOME,
                                 ArmConstants.TH3HOME,
                                 ArmConstants.TH4HOME);
+    }
+
+    public ArmControlMode getControlMode(){
+        return controlMode;
     }
 
     public ArmPose getTargetPose(){
@@ -47,9 +59,24 @@ public class ArmController {
     // Gets the current arm pose from the MotorPool in radians
     public ArmPose getPose(){
         // get the motor position data
-        return new ArmPose(ticksToRadians(motorPool.getJoint1Ticks()) + ArmConstants.TH1HOME,
-                            ticksToRadians(motorPool.getJoint2Ticks()) + ArmConstants.TH2HOME,
-                            0, 0); // todo: track servo position
+        ArmPose ap = new ArmPose(
+                ticksToRadians(motorPool.getJoint1Ticks()) + ArmConstants.TH1HOME,
+                ticksToRadians(motorPool.getJoint2Ticks()) + ArmConstants.TH2HOME,
+                targetPose.th3,
+                targetPose.th4);
+
+        // apply the previous backlash correction to a copy of the motor read
+        ArmPose ap2 = ap.copy();
+        ap2.th1 += correction.getX();
+        ap2.th2 += correction.getY();
+
+        // calculate the new backlash correction using the previous backlash correction
+        correction = BacklashCorrection.getCorrection(ap2);
+
+        // apply the new backlash correction to the current motor read
+        ap.th1 += correction.getX();
+        ap.th2 += correction.getY();
+        return ap;
     }
 
     // Gets the current arm velocity from the MotorPool in radians per second
@@ -93,12 +120,9 @@ public class ArmController {
         targetPose.th3 = UtilityKit.limitToRange(radians3, ArmConstants.TH3MIN, ArmConstants.TH3MAX);
         targetPose.th4 = UtilityKit.limitToRange(radians4, ArmConstants.TH4MIN, ArmConstants.TH4MAX);
 
-        // correct for backlash
-        Vector2D correction = BacklashCorrection.getCorrection(targetPose);
-
-        // send the results to the motor pool
-        motorPool.setJointPositions(ArmController.radiansToTicks(targetPose.th1 - ArmConstants.TH1HOME + correction.getX()),
-                                    ArmController.radiansToTicks(targetPose.th2 - ArmConstants.TH2HOME + correction.getY()));
+        // send the results to the motor pool after removing the backlash correction and home position
+        motorPool.setJointPositions(ArmController.radiansToTicks(targetPose.th1 - ArmConstants.TH1HOME - correction.getX()),
+                                    ArmController.radiansToTicks(targetPose.th2 - ArmConstants.TH2HOME - correction.getY()));
         motorPool.setRockJointPosition(convertRangeToServo(targetPose.th3));
         motorPool.setRollJointPosition(convertRangeToServo(targetPose.th4));
     }

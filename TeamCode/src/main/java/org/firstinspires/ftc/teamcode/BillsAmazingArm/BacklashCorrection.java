@@ -30,19 +30,19 @@ public class BacklashCorrection {
         // calculate the weighted average cm for joint 2
         Vector2D v23 = Vector2D.weightedAverage(v2, ArmConstants.M2, v3, ArmConstants.M3);
 
-        // get joint 2 relative to the joint 1
-        Vector2D j2 = Kinematics.j2(pose).subtract(Kinematics.j1(pose));
+        // get joint 2 position
+        Vector2D j2 = Kinematics.j2(pose);
 
         // if the cm is behind joint 2, add the correction
-        if(j2.getX() > v23.getX()){
+        if(v23.getX() - j2.getX() < 0){
             correction.setY(ArmConstants.BACKLASH2);
         }
 
-        // calculate the weighted average cm for joint 3
-        Vector2D v123 = Vector2D.weightedAverage(v1, ArmConstants.M1, v23, 1.0); // the weight is already applied
+        // calculate the weighted average cm for all segments
+        Vector2D v123 = Vector2D.weightedAverage(v1, ArmConstants.M1, v23, ArmConstants.M2 + ArmConstants.M3); // the weight is already applied
 
         // if the cm is behind joint 1, do not add the correction
-        if(v123.getX() > 0){
+        if(v123.getX() - ArmConstants.L0x > 0){
             correction.setX(ArmConstants.BACKLASH1);
         }
 

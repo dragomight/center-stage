@@ -14,7 +14,15 @@ public class ArmTests {
     // and then run this test to hold the arm in the described position.
     public static ActionSequence armTest1(Cadbot cadbot){
         return new SequenceBuilder(cadbot)
-                .moveArmTo(ArmPoseXZ.ready())
+                .moveArmTo(ArmPoseXZ.home())
+                .moveArmTo(ArmPoseXZ.carry())
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.forward())
+                .gripperPush(0.01, true)
+                .moveArmTo(ArmPoseXZ.forward())
+                .gripperPush(1.0, false)
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.carry())
               //  .moveArmTo(ArmPoseXZ.forward())
               //  .moveArmTo(ArmPoseXZ.placeOnBackdrop(GameField.getBackdropPixelPosition(row, col)))
                 .build();

@@ -95,5 +95,9 @@ public class UtilityKit {
 
     static public double inToCm(double n) {return n*2.54;}
 
+    static public double mmToIn(double mm){return mm/25.4;}
+
+    static public double inToMM(double in){return in*25.4;}
+
     static public double cmToIn(double n) {return n/2.54;}
 }

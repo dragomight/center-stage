@@ -146,7 +146,7 @@ public class Vector2D {
     }
 
     public static Vector2D weightedAverage(Vector2D v1, double w1, Vector2D v2, double w2) {
-        return v1.copy().multiplyBy(w1).add(v2.copy().multiplyBy(w2)).divideBy(2.0);
+        return v1.copy().multiplyBy(w1).add(v2.copy().multiplyBy(w2)).divideBy(w1 + w2);
     }
 
     public Vector2D setX(double x){

@@ -97,8 +97,8 @@ public class MotorPool {
 
 //            joint1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            joint2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            joint1.setPower(0.1);
-            joint2.setPower(0.1);
+            joint1.setPower(1.0);
+            joint2.setPower(1.0);
         }
         catch (Exception e) {
             Log.e("MotorPool: initialize", "Arm dc motors failed to initialize");
