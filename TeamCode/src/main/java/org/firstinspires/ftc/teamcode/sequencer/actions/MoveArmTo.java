@@ -78,7 +78,17 @@ public class MoveArmTo implements RobotAction{
                 ArmConstants.L2,
                 j3Target.getX() - ArmConstants.L0x,
                 j3Target.getY() - ArmConstants.L0z);
+
+
         Vector2D theta = sols.get(0);
+        // if there is more than solution
+        if(sols.size() > 1){
+            Vector2D theta2 = sols.get(1);
+            // use the one with the elbow up, i.e. j2 position with larger z
+            if(Math.abs(theta.getX()) > Math.abs(theta2.getX())){
+                theta = theta2;
+            }
+        }
 
         // Use the arm controller to set the motors to their target positions
         armController.setTargetPosition(theta.getX(), theta.getY(), targetArmPoseXZ.getTh3(pose.th1, pose.th2), targetArmPoseXZ.th4);

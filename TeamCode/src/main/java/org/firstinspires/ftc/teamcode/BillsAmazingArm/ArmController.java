@@ -125,6 +125,9 @@ public class ArmController {
                                     ArmController.radiansToTicks(targetPose.th2 - ArmConstants.TH2HOME - correction.getY()));
         motorPool.setRockJointPosition(convertRangeToServo(targetPose.th3));
         motorPool.setRollJointPosition(convertRangeToServo(targetPose.th4));
+        Log.e("MoveArmTo", "ArmController: th1="
+                + Math.toDegrees(targetPose.th1 - ArmConstants.TH1HOME - correction.getX())
+                + " th2=" + Math.toDegrees(targetPose.th2 - ArmConstants.TH2HOME - correction.getY()));
     }
 
 //    // will set the motor speeds... this has problems for servo control to be worked out later, so don't use now

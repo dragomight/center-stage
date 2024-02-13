@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.sequencer;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
@@ -64,7 +66,9 @@ public class GameField {
             y = COL_SPACING * (4.0-col);
         }
         double z = hyp * SIN_BDA;
-        return new Vector3D(x, y, z);
+        Vector3D v = new Vector3D(x, y, z);
+        Log.e("GameField", "pixelXYZ=" + v);
+        return v;
     }
 
     public static Vector2D redBackdrop(){

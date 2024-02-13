@@ -17,14 +17,48 @@ public class ArmTests {
                 .moveArmTo(ArmPoseXZ.home())
                 .moveArmTo(ArmPoseXZ.carry())
                 .moveArmTo(ArmPoseXZ.ready2())
+                //.moveArmTo(ArmPoseXZ.forward())
+                //.moveArmTo(ArmPoseXZ.passingOverForward())
+                .moveArmTo(ArmPoseXZ.reachingBackward(-12, 8.0))
+                .moveArmTo(ArmPoseXZ.reachingBackward(-12, 0.0))
+                .wait(1.0)
+                .gripperPush(3.0, false)
+                .moveArmTo(ArmPoseXZ.reachingBackward(-12, 8.0))
+                //.moveArmTo(ArmPoseXZ.passingOverForward())
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.carry())
+                .build();
+    }
+
+    // move out and return to carry position (tested successfully at full power, but jerky)
+    public static ActionSequence armTest2(Cadbot cadbot){
+        return new SequenceBuilder(cadbot)
+                .moveArmTo(ArmPoseXZ.home())
+                .moveArmTo(ArmPoseXZ.carry())
+                .moveArmTo(ArmPoseXZ.ready2())
                 .moveArmTo(ArmPoseXZ.forward())
                 .gripperPush(0.01, true)
                 .moveArmTo(ArmPoseXZ.forward())
                 .gripperPush(1.0, false)
                 .moveArmTo(ArmPoseXZ.ready2())
                 .moveArmTo(ArmPoseXZ.carry())
-              //  .moveArmTo(ArmPoseXZ.forward())
-              //  .moveArmTo(ArmPoseXZ.placeOnBackdrop(GameField.getBackdropPixelPosition(row, col)))
+                .build();
+    }
+
+    // moves the arm outward, forward, runs the gripper, then to straight up, then back to carry
+    public static ActionSequence armTest3(Cadbot cadbot){
+        return new SequenceBuilder(cadbot)
+                .moveArmTo(ArmPoseXZ.home())
+                .moveArmTo(ArmPoseXZ.carry())
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.forward())
+                .gripperPush(0.01, true)
+                .moveArmTo(ArmPoseXZ.forward())
+                .gripperPush(1.0, false)
+                .moveArmTo(ArmPoseXZ.straightUp())
+                .wait(2.0)
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.carry())
                 .build();
     }
 

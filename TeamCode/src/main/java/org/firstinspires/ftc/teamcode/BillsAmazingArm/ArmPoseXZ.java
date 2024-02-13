@@ -16,6 +16,7 @@ public class ArmPoseXZ {
     public final static double TILT_DOWN_FRONT = Math.toRadians(180);
     public final static double TILT_DOWN_BACK = Math.toRadians(-180);
     public final static double TILT_BACKDROP_FRONT = Math.toRadians(120);
+    public final static double UP = 0;
 
     public ArmPoseXZ(){
 
@@ -63,16 +64,38 @@ public class ArmPoseXZ {
         //return new ArmPoseXZ(5.5, 7.0, Math.toRadians(0.0), 0,TILT_DOWN_FRONT);
     }
 
+    public static ArmPoseXZ straightUp(){
+        double th1 = Math.toRadians(0);
+        double th2 = Math.toRadians(0);
+        return from(new ArmPose(th1, th2, 0, 0));
+    }
+
+    public static ArmPoseXZ passingOverForward(){
+        double th1 = Math.toRadians(-90);
+        double th2 = Math.toRadians(90);
+        return from(new ArmPose(th1, th2, 0, 0));
+    }
+
+    public static ArmPoseXZ passingOverBackward(){
+        double th1 = Math.toRadians(0);
+        double th2 = Math.toRadians(-90);
+        return from(new ArmPose(th1, th2, 0, 0));
+    }
+
     public static ArmPoseXZ forward(){
         return new ArmPoseXZ(14.0, 8.0, Math.toRadians(90.0), 0, TILT_DOWN_FRONT);
     }
 
-    public static ArmPoseXZ pickUpAtFront(double x, double z){
-        return new ArmPoseXZ(x, z, Math.toRadians(90.0), 0, TILT_DOWN_FRONT);
+    public static ArmPoseXZ backward(){
+        return new ArmPoseXZ(-14.0, 8.0, Math.toRadians(-90.0), 0, TILT_DOWN_BACK);
     }
 
-    public static ArmPoseXZ pickUpAtBack(double x, double z){
-        return new ArmPoseXZ(x, z, 0.0, 0.0, TILT_DOWN_BACK);
+    public static ArmPoseXZ reachingBackward(double x, double z){
+        return new ArmPoseXZ(x, z, Math.toRadians(-90.0), 0, TILT_DOWN_BACK);
+    }
+
+    public static ArmPoseXZ reachingForward(double x, double z){
+        return new ArmPoseXZ(x, z, Math.toRadians(90.0), 0, TILT_DOWN_FRONT);
     }
 
     public static ArmPoseXZ placeOnBackdrop(double x, double z){
