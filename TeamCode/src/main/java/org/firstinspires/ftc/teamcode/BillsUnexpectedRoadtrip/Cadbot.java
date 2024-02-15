@@ -22,13 +22,9 @@ public class Cadbot {
     public MecanumController mecanumController;
     public HardwareMap hardwareMap;
     public GamePadController gamePadController;
+    public GamePadController2 gamePadController2;
 
     public AutoPilot autoPilot;
-
-//    public Yarm yarm;
-//    public YarmController yarmController;
-//    public GamePadState gamePadState1; // only used for yarm
-    public Gamepad gamepad1;
 
     public AllianceColor allianceColor = AllianceColor.RED;
     public AlliancePosition alliancePosition = AlliancePosition.LEFT;
@@ -37,13 +33,22 @@ public class Cadbot {
 
     public ThirdEyeSurfer thirdEyeSurfer;
 
+    private boolean runningAutonomous = true;
+
     // forward offset is the distance from the back of the robot to its center
     public final static double FORWARD_TO_CENTER_OF_ROBOT = 8.5; // inches
+
+    public Cadbot(boolean runningAutonomous){
+        this.runningAutonomous = runningAutonomous;
+    }
+
+    public boolean isRunningAutonomous(){
+        return runningAutonomous;
+    }
 
     public void initialize(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2){
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
-        this.gamepad1 = gamepad1;
 
         motorPool = new MotorPool();
         motorPool.initialize(hardwareMap);
@@ -58,15 +63,11 @@ public class Cadbot {
         gamePadController = new GamePadController();
         gamePadController.initialize(gamepad1, gamepad2, this);
 
+        gamePadController2 = new GamePadController2();
+        gamePadController2.initialize(gamepad1, gamepad2, this);
+
         autoPilot = new AutoPilot();
         autoPilot.initialize(this);
-
-//        gamePadState1 = new GamePadState(); // only used for yarm
-//        gamePadState1.initialize(telemetry);
-
-//        yarm = new Yarm();
-//        yarmController = new YarmController();
-//        yarmController.initialize(gamePadState1, yarm, telemetry);
 
         thirdEyeSurfer = new ThirdEyeSurfer();
         thirdEyeSurfer.initialize(this);
@@ -78,20 +79,14 @@ public class Cadbot {
         motorPool.ready();
         // update knowledge of position, heading, velocity, acceleration
         deadWheelTracker.update();
-        // temp: get pose for testing
-        //Vector2D1 poseEstimate = deadWheelTracker.getPose();
 
         // run the gamepad controller to perform driving
         gamePadController.update();
+        gamePadController2.update();
 
-        // update the arm
-//        gamePadState1.update(gamepad1, false);
-        motorPool.update(this);
+        // update the arm movement
+        autoPilot.update();
 
-        // todo: change telemetry
-//        telemetry.addData("x", poseEstimate.getX());
-//        telemetry.addData("y", poseEstimate.getY());
-//        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
         telemetry.update();
     }
 
@@ -99,18 +94,13 @@ public class Cadbot {
     public void autoUpdate(){
         // clear cache to get ready for a bulk motor read
         motorPool.ready();
+
         // update knowledge of position, heading, velocity, acceleration
         deadWheelTracker.update();
-        // temp: get pose for testing
-        //Vector2D1 poseEstimate = deadWheelTracker.getPose();
 
         // perform autonomous sequence
         autoPilot.update();
 
-        // todo: change telemetry
-//        telemetry.addData("x", poseEstimate.getX());
-//        telemetry.addData("y", poseEstimate.getY());
-//        telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
         telemetry.update();
     }
 

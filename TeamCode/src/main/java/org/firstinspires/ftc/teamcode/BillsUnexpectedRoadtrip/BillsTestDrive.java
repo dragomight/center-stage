@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 @TeleOp(name="Bills Test Drive", group="Bill's Emporium")
 public class BillsTestDrive extends LinearOpMode {
-    public Cadbot cadbot = new Cadbot();
+    public Cadbot cadbot = new Cadbot(false);
 
     @Override public void runOpMode(){
         boolean done = false;
@@ -64,6 +64,8 @@ public class BillsTestDrive extends LinearOpMode {
         cadbot.deadWheelTracker.resetPose(new Vector2D1(0, 0, 0));
 
         waitForStart();
+
+        cadbot.gamePadController2.backMap.start();
 
         while (!isStopRequested()) {
             cadbot.update();

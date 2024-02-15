@@ -26,7 +26,7 @@ public class GiddyOpMode extends LinearOpMode{
     public static final File DRAGOMIGHT_FOLDER =
             new File(AppUtil.ROOT_FOLDER + "/Dragomight/");
 
-    public Cadbot cadbot = new Cadbot();
+    public Cadbot cadbot = new Cadbot(true);
 
     @Override public void runOpMode(){
 

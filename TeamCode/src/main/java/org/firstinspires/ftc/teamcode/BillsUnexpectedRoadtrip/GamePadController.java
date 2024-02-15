@@ -135,7 +135,8 @@ public class GamePadController {
             cadbot.deadWheelTracker.resetPose(new Vector2D1(0, 0, 0));
         }
 
-        // Manual Mode Arm Controls
+        /////////////////////////////////////////////////////////////////////////////////////////
+        // Manual Mode Arm Controls for the Truly Desperate
         ArmPose p = cadbot.armController.getTargetPose();
         double dTh1 = 0;
         double dTh2 = 0;

@@ -251,44 +251,4 @@ public class MotorPool {
         rightBackDrive.setPower(rightBack);
         leftBackDrive.setPower(leftBack);
     }
-
-    public void update(Cadbot cadbot) {
-
-        // READ ALL DC MOTORS
-//        cadbot.yarm.joint1.updateTicks(joint1.getCurrentPosition());
-//        cadbot.yarm.joint2.updateTicks(joint2.getCurrentPosition());
-//        cadbot.yarm.joint1.updateTicksPerSecond(joint1.getVelocity());
-//        cadbot.yarm.joint2.updateTicksPerSecond(joint2.getVelocity());
-        //cadilac.yarm.calculateEndpoint();
-
-        //UPDOOT
-        //cadilac.cinnamonController.update(verbose);
-        //cadbot.yarmController.update(true);
-
-        // SET THE DC MOTORS AND SERVOS
-//        if (cadbot.yarm.launch) {
-//            launchMan.setPosition(0.5);
-//        }
-//        else {
-//            launchMan.setPosition(0);
-//        }
-//        if (cadbot.yarm.tilt) {
-//            tiltMan.setPosition(60/300.0);
-//        }
-//        else {
-//            tiltMan.setPosition(0);
-//        }
-
-//        cadbot.telemetry.addData("JT1 ", joint1.getCurrentPosition());
-//        cadbot.telemetry.addData("JT2 ", joint2.getCurrentPosition());
-//
-//        joint1.setTargetPosition(cadbot.yarm.joint1TickTarget);
-//        joint2.setTargetPosition(cadbot.yarm.joint2TickTarget);
-//
-//        joint1.setPower(1);
-//        joint2.setPower(1);
-//
-//        joint1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        joint2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
 }

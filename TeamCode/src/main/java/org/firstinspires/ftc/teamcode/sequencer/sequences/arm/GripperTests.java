@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.sequencer.sequences.armCalibration;
+package org.firstinspires.ftc.teamcode.sequencer.sequences.arm;
 
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.sequencer.ActionSequence;

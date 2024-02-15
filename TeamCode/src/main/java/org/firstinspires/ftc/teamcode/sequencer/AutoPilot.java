@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.sequencer;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
-import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
-import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
-import org.firstinspires.ftc.teamcode.sequencer.actions.DriveTo;
-import org.firstinspires.ftc.teamcode.sequencer.actions.RotateTo;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.ArmTests;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.Backdrop;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueRight;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedLeft;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedRight;
 
 /**
  * The basic autonomous path...
@@ -42,44 +44,48 @@ public class AutoPilot {
     private Cadbot cadbot;
     public SequenceDirector sequenceDirector;
 
-    private double preferredHeading; // todo: we don't want this here
-    public SequenceLibrary sequenceLibrary;
-
     public void initialize(Cadbot cadbot){
         this.cadbot = cadbot;
-        sequenceLibrary = new SequenceLibrary(cadbot);
         sequenceDirector = new SequenceDirector();
 
-        // BUILD THE SEQUENCE
+        if(!cadbot.isRunningAutonomous())
+            return;
+
+        // SET THE SEQUENCE
         // if blue
         if(cadbot.allianceColor == AllianceColor.BLUE) {
-            preferredHeading = Math.toRadians(-90);
             // if left
             if(cadbot.alliancePosition == AlliancePosition.LEFT) {
-                sequenceDirector.addSequence(sequenceLibrary.blueLeft());
+                sequenceDirector.addSequence(BlueLeft.start(cadbot));
             }
             // if right
             else{
-                sequenceDirector.addSequence(sequenceLibrary.blueRight());
+                sequenceDirector.addSequence(BlueRight.start(cadbot));
             }
         }
         // if red
         else{
-            preferredHeading = Math.toRadians(90);
             // if left
             if(cadbot.alliancePosition == AlliancePosition.LEFT) {
-                sequenceDirector.addSequence(sequenceLibrary.redLeft());
+                sequenceDirector.addSequence(RedLeft.start(cadbot));
             }
             // if right
             else{
-                sequenceDirector.addSequence(sequenceLibrary.redRight());
+                sequenceDirector.addSequence(RedRight.start(cadbot));
             }
-
         }
     }
 
     public void update(){
         sequenceDirector.update();
+    }
+
+    public void runArmTest(){
+        sequenceDirector.addSequence(ArmTests.armTest1(cadbot));
+    }
+
+    public void placeOnBackdrop(int row, int col){
+        sequenceDirector.addSequence(Backdrop.placePixel(cadbot, row, col));
     }
 
 
