@@ -77,6 +77,7 @@ public class Cadbot {
     public void update(){
         // clear cache to get ready for a bulk motor read
         motorPool.ready();
+
         // update knowledge of position, heading, velocity, acceleration
         deadWheelTracker.update();
 
@@ -84,21 +85,7 @@ public class Cadbot {
         gamePadController.update();
         gamePadController2.update();
 
-        // update the arm movement
-        autoPilot.update();
-
-        telemetry.update();
-    }
-
-    // This function is called for autonomous mode
-    public void autoUpdate(){
-        // clear cache to get ready for a bulk motor read
-        motorPool.ready();
-
-        // update knowledge of position, heading, velocity, acceleration
-        deadWheelTracker.update();
-
-        // perform autonomous sequence
+        // update automated sequences
         autoPilot.update();
 
         telemetry.update();

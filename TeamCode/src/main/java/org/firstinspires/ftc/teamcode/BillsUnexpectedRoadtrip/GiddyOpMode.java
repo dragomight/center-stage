@@ -73,7 +73,7 @@ public class GiddyOpMode extends LinearOpMode{
         waitForStart();
 
         while (!isStopRequested()) {
-            cadbot.autoUpdate();
+            cadbot.update();
         }
 
         // todo: store the current field pose for the driver op mode
