@@ -4,9 +4,9 @@ import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmConstants;
 import org.firstinspires.ftc.teamcode.BillsAmazingArm.ArmPoseXZ;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
-import org.firstinspires.ftc.teamcode.sequencer.ActionSequence;
-import org.firstinspires.ftc.teamcode.sequencer.GameField;
-import org.firstinspires.ftc.teamcode.sequencer.SequenceBuilder;
+import org.firstinspires.ftc.teamcode.sequencer.engine.ActionSequence;
+import org.firstinspires.ftc.teamcode.sequencer.engine.GameField;
+import org.firstinspires.ftc.teamcode.sequencer.engine.SequenceBuilder;
 
 public class BlueRight {
     public static ActionSequence start(Cadbot cadbot){
@@ -57,12 +57,14 @@ public class BlueRight {
                 .driveTo(GameField.centerOfTile(1,4).add(3, 0), Math.toRadians(-90)) // forward to the center
                 .rotateTo(GameField.centerOfTile(1,4).add(3, 0), Math.toRadians(0)) // rotate to face the backdrop
                 .driveTo(GameField.centerOfTile(5, 4), Math.toRadians(0)) // forward down the center
+
                 .driveTo(GameField.blueBackdrop().add(-ArmConstants.L3, target.y), 0)
                 .moveArmTo(ArmPoseXZ.ready2())
                 .moveArmTo(ArmPoseXZ.placeOnBackdrop(target.x, target.z))
                 .gripperPush(2.0, true)
                 .moveArmTo(ArmPoseXZ.ready2())
                 .moveArmTo(ArmPoseXZ.carry())
+
                 .driveTo(GameField.betweenTiles(6, 4, 5, 4), Math.toRadians(0)) // park
                 .build();
     }

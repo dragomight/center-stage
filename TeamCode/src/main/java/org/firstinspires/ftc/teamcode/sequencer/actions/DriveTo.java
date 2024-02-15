@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.fuzzy.FuzzyController2D;
 import org.firstinspires.ftc.teamcode.fuzzy.FuzzyPowerController;
-import org.firstinspires.ftc.teamcode.sequencer.GameField;
+import org.firstinspires.ftc.teamcode.sequencer.engine.GameField;
 
 /**
  * This simple motion drives straight at the target (x, y) in field coordinates and turns the

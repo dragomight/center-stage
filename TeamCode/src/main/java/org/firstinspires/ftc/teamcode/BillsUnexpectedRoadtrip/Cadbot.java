@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsEs.ControlType;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.SpikeMark;
 import org.firstinspires.ftc.teamcode.BillsTensorTunes.ThirdEyeSurfer;
-import org.firstinspires.ftc.teamcode.sequencer.AutoPilot;
+import org.firstinspires.ftc.teamcode.sequencer.engine.AutoPilot;
 
 public class Cadbot {
     public MotorPool motorPool;

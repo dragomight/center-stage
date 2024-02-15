@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.sequencer.sequences.arm;
 
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
-import org.firstinspires.ftc.teamcode.sequencer.ActionSequence;
-import org.firstinspires.ftc.teamcode.sequencer.SequenceBuilder;
+import org.firstinspires.ftc.teamcode.sequencer.engine.ActionSequence;
+import org.firstinspires.ftc.teamcode.sequencer.engine.SequenceBuilder;
 
 public class GripperTests {
 
