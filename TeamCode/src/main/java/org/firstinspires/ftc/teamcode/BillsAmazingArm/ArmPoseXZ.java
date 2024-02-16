@@ -70,6 +70,12 @@ public class ArmPoseXZ {
         return from(new ArmPose(th1, th2, 0, 0));
     }
 
+    public static ArmPoseXZ hanging(){
+        double th1 = Math.toRadians(-90);
+        double th2 = Math.toRadians(120);
+        return from(new ArmPose(th1, th2, 0, 0));
+    }
+
     public static ArmPoseXZ passingOverForward(){
         double th1 = Math.toRadians(-90);
         double th2 = Math.toRadians(90);

@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.BillsAllyMap.BackMap;
  * This class processes the control selections of the Game Pad Controller of Driver 2
  */
 public class GamePadController2 {
-    boolean lastX = false;
-    boolean lastY = false;
+    boolean lastRB = false;
     boolean lastUp = false;
     boolean lastDown = false;
     boolean lastLeft = false;
@@ -42,6 +41,12 @@ public class GamePadController2 {
             backMap.fillSelectedCells();
             //cadbot.telemetry.addData("HIT ", "!!!");
         }
+
+        if (gamepad1.right_bumper && !lastRB) {
+            cadbot.autoPilot.placeOnBackdrop(backMap.firstSlot, backMap.secondSlot);
+            cadbot.telemetry.addData("HIT ", "!!!");
+        }
+        lastRB = gamepad1.right_bumper;
 
         // CHANGE THE ROW AND COLUMN BEING SELECTED
         if(gamepad2.dpad_up && !lastUp){

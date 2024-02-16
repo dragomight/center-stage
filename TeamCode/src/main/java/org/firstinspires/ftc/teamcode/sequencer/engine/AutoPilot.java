@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.sequencer.engine;
 
+import org.firstinspires.ftc.teamcode.BillsAllyMap.CellVector;
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
@@ -84,8 +85,18 @@ public class AutoPilot {
         sequenceDirector.addSequence(ArmTests.armTest1(cadbot));
     }
 
-    public void placeOnBackdrop(int row, int col){
-        sequenceDirector.addSequence(Backdrop.placePixel(cadbot, row, col));
+    public void placeOnBackdrop(CellVector v1, CellVector v2){
+        if (v1.selected && v2.selected) {
+
+        }
+        else {
+            if (v1.selected) {
+                sequenceDirector.addSequence(Backdrop.placePixel(cadbot, v1.row+1, v1.col+1));
+            }
+            else if (v2.selected) {
+                sequenceDirector.addSequence(Backdrop.placePixel(cadbot, v2.row+1, v2.col+1));
+            }
+        }
     }
 
 

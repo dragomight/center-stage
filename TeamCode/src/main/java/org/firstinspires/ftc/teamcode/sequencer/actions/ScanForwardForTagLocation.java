@@ -24,8 +24,8 @@ public class ScanForwardForTagLocation implements RobotAction{
         Vector2D1 pose = cadbot.thirdEyeSurfer.scanForwardForTagLocation();
         if(pose != null) {
             Log.e("ScanForwardForTagLocation" , "wheelPose=" + cadbot.deadWheelTracker.getPose() + "  eyePose=" + pose);
-//            cadbot.deadWheelTracker.resetPose(pose);
-//                done = true;
+            cadbot.deadWheelTracker.resetPose(pose);
+                done = true;
 
         }
         else

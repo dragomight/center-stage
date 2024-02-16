@@ -82,8 +82,10 @@ public class Cadbot {
         deadWheelTracker.update();
 
         // run the gamepad controller to perform driving
-        gamePadController.update();
-        gamePadController2.update();
+        if(!isRunningAutonomous()) {
+            gamePadController.update();
+            gamePadController2.update();
+        }
 
         // update automated sequences
         autoPilot.update();
