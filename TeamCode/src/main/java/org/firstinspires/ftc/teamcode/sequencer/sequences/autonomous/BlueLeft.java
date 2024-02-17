@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous;
 
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.sequencer.engine.ActionSequence;
-import org.firstinspires.ftc.teamcode.sequencer.engine.GameField;
+import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.GameField;
 import org.firstinspires.ftc.teamcode.sequencer.engine.SequenceBuilder;
 
 public class BlueLeft {
@@ -20,7 +20,7 @@ public class BlueLeft {
                 .rotateTo(GameField.betweenTiles(4, 6, 5, 6), Math.toRadians(0)) // rotate to face the backdrop
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
                 .gripperPush(2.0, true)
-                .driveTo(GameField.centerOfTile(6, 6).add(-3,0), Math.toRadians(0)) // park
+                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
@@ -35,7 +35,7 @@ public class BlueLeft {
                 .driveTo(GameField.centerOfTile(5, 6), Math.toRadians(0)) // park
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
                 .gripperPush(2.0, true)
-                .driveTo(GameField.centerOfTile(6, 6).add(-3,0), Math.toRadians(0)) // park
+                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
@@ -47,7 +47,7 @@ public class BlueLeft {
                 .rotateTo(GameField.centerOfTile(4,6), Math.toRadians(0)) // rotate to face the backdrop
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
                 .gripperPush(2.0, true)
-                .driveTo(GameField.centerOfTile(6, 6).add(-3,0), Math.toRadians(0)) // park
+                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }

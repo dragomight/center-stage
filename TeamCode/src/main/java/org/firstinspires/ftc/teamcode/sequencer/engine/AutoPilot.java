@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
 import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.ArmTests;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.Backdrop;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.PixelPicker;
+import org.firstinspires.ftc.teamcode.sequencer.sequences.arm.TrussMeImAnEngineer;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueLeft;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.BlueRight;
 import org.firstinspires.ftc.teamcode.sequencer.sequences.autonomous.RedLeft;
@@ -85,6 +87,10 @@ public class AutoPilot {
         sequenceDirector.addSequence(ArmTests.armTest1(cadbot));
     }
 
+    public void grabPixel(){
+        sequenceDirector.addSequence(PixelPicker.grab(cadbot));
+    }
+
     public void placeOnBackdrop(CellVector v1, CellVector v2){
         if (v1.selected && v2.selected) {
 
@@ -99,5 +105,7 @@ public class AutoPilot {
         }
     }
 
-
+    public void hangFromRigging(){
+        sequenceDirector.addSequence(TrussMeImAnEngineer.hangingMyself(cadbot));
+    }
 }

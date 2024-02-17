@@ -11,6 +11,26 @@ public class ArmTests {
     // After passing this inspection, set the motor power to about .3, extending the arm manually to straight up,
     // reset the start position to match what is below
     // and then run this test to hold the arm in the described position.
+    public static ActionSequence reachAccuracy(Cadbot cadbot){
+        return new SequenceBuilder(cadbot)
+                .moveArmTo(ArmPoseXZ.home())
+                .moveArmTo(ArmPoseXZ.carry())
+                .moveArmTo(ArmPoseXZ.ready2())
+                //.moveArmTo(ArmPoseXZ.forward())
+                //.moveArmTo(ArmPoseXZ.passingOverForward())
+                .moveArmTo(ArmPoseXZ.reachingForward(-12, 8.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-12, 0.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-13, 8.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-13, 0.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-14, 8.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-14, 0.0))
+                .moveArmTo(ArmPoseXZ.reachingForward(-13, 8.0))
+                //.moveArmTo(ArmPoseXZ.passingOverForward())
+                .moveArmTo(ArmPoseXZ.ready2())
+                .moveArmTo(ArmPoseXZ.carry())
+                .build();
+    }
+
     public static ActionSequence armTest1(Cadbot cadbot){
         return new SequenceBuilder(cadbot)
                 .moveArmTo(ArmPoseXZ.home())

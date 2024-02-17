@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
-import org.firstinspires.ftc.teamcode.sequencer.engine.GameField;
 
 import java.util.ArrayList;
 
@@ -23,6 +22,7 @@ public class DeadWheelTracker {
     public static double FORWARD_OFFSET = -3.3; //-3.75 + 0.3; // in; offset of the lateral wheel from center of robot (negative is toward the back), the first number is measured, the second is tuning
     public static double INCHES_PER_TICK = 2*Math.PI*WHEEL_RADIUS/TICKS_PER_REV;
     public static double DISTANCE_FROM_WALL = 8.5; // The distance from the back of the robot to its center at start
+    public static double COLLISION_RADIUS = 10; // Assuming we remain square to the field with 18" robot and have 1" margin for safety
 
     private double heading = 0; // robot's bearing in radians
     private double xWorld = 0; // the robot's position in world coordinates, in inches
@@ -57,6 +57,11 @@ public class DeadWheelTracker {
     double topAcceleration;
     int topAccelerationIncident;
 
+    public final static int GRANULARITY = 10;
+    public final static double GRANES = GRANULARITY;
+    double[][] powerResponseX = new double[GRANULARITY][GRANULARITY];
+    double[][] powerResponseY = new double[GRANULARITY][GRANULARITY];
+
     private ElapsedTime runtime = new ElapsedTime();
 
     // history of positions and headings
@@ -80,7 +85,7 @@ public class DeadWheelTracker {
         this.cadbot = cadbot;
         this.motorPool = cadbot.motorPool;
         // initialize the coordinates
-        resetPose(GameField.getStartPose(cadbot.allianceColor, cadbot.alliancePosition, DISTANCE_FROM_WALL));
+        resetPose(GameField.getAutonomousStartPose(cadbot.allianceColor, cadbot.alliancePosition, DISTANCE_FROM_WALL));
     }
 
     public void resetPose(Vector2D1 pose){
@@ -191,6 +196,26 @@ public class DeadWheelTracker {
         sb.append("  avgDt=");
         sb.append(String.format("%5f", avgDt));
         return sb.toString();
+    }
+
+    public Vector2D projectNextPose(Vector2D delta){
+        Vector2D1 pose = getPose();
+        Vector2D1 velocity = getVelocity();
+        Vector2D1 acc = getAcceleration(); // we need to project the acceleration from the delta
+        double avgDt = getAvgDt();
+
+        Vector2D projected = new Vector2D(
+                pose.getX() + velocity.getX() * avgDt + .5 * acc.getX() * avgDt * avgDt,
+                pose.getY() + velocity.getY() * avgDt + .5 * acc.getY() * avgDt * avgDt);
+
+        return projected;
+    }
+
+    public Vector2D projectAcceleration(Vector2D delta){
+        //delta.getX()/GRANES;
+        // given the current velocity and the power delta, what is the likely acceleration
+        //return new Vector2D(powerResponseX[vel][del], powerResponseY[vel][del]);
+        return new Vector2D();
     }
 
     public Vector2D1 getPose(){

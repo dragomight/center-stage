@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.BillsAllyMap.BackMap;
  * This class processes the control selections of the Game Pad Controller of Driver 2
  */
 public class GamePadController2 {
-    boolean lastRB = false;
+
     boolean lastUp = false;
     boolean lastDown = false;
     boolean lastLeft = false;
@@ -18,7 +18,7 @@ public class GamePadController2 {
     Gamepad gamepad2;
     Cadbot cadbot;
 
-    BackMap backMap = new BackMap();
+    public BackMap backMap = new BackMap();
 
     public void initialize(Gamepad gamepad1, Gamepad gamepad2, Cadbot cadbot){
         this.gamepad1 = gamepad1;
@@ -42,12 +42,6 @@ public class GamePadController2 {
             //cadbot.telemetry.addData("HIT ", "!!!");
         }
 
-        if (gamepad1.right_bumper && !lastRB) {
-            cadbot.autoPilot.placeOnBackdrop(backMap.firstSlot, backMap.secondSlot);
-            cadbot.telemetry.addData("HIT ", "!!!");
-        }
-        lastRB = gamepad1.right_bumper;
-
         // CHANGE THE ROW AND COLUMN BEING SELECTED
         if(gamepad2.dpad_up && !lastUp){
             backMap.navigator.navUp();
@@ -66,11 +60,6 @@ public class GamePadController2 {
         }
         lastRight = gamepad2.dpad_right;
 
-        // PLACE ON THE BACKDROP (executes an automated placement on the backdrop)
-        if(gamepad2.b){
-            // if either setting is outside of the allowed backdrop position it is not placed
-
-        }
         cadbot.telemetry.addData("First ", backMap.firstSlot.selected);
         cadbot.telemetry.addData("Second ", backMap.secondSlot.selected);
         cadbot.telemetry.addData("Cell ", backMap.getCurrentCell().toString());

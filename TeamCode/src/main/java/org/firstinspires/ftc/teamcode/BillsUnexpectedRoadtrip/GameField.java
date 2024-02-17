@@ -1,13 +1,14 @@
-package org.firstinspires.ftc.teamcode.sequencer.engine;
+package org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip;
 
 import android.util.Log;
 
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
 import org.firstinspires.ftc.teamcode.BillsEs.AlliancePosition;
-import org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip.Cadbot;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D1;
 import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector3D;
+
+import java.util.ArrayList;
 
 /**
  * This class provides transformations between robot and field coordinates.
@@ -36,6 +37,7 @@ public class GameField {
     public final static double TILE_SIZE = 23.75; // inches
     public final static double HALF_TILE_SIZE = TILE_SIZE/2.0; // in
 
+    public final static double PERIMETER = TILE_SIZE * 3;
 
     public final static double BACKDROP_ANGLE = Math.toRadians(60.0); // angle from floor, can be 62.0
     public final static double COS_BDA = Math.cos(BACKDROP_ANGLE);
@@ -86,7 +88,7 @@ public class GameField {
      * @param position
      * @param forwardOffset
      */
-    public static Vector2D1 getStartPose(AllianceColor color, AlliancePosition position, double forwardOffset){
+    public static Vector2D1 getAutonomousStartPose(AllianceColor color, AlliancePosition position, double forwardOffset){
         double xStart, yStart, fStart; // f is for facing
 
         if(color == AllianceColor.RED){
@@ -114,6 +116,25 @@ public class GameField {
             }
         }
         return new Vector2D1(xStart, yStart, fStart);
+    }
+
+    public static Vector2D1 getDriverStartPose(AllianceColor color, AlliancePosition position){
+        if (color == AllianceColor.RED) {
+            if ( position == AlliancePosition.LEFT) {
+                return new Vector2D1(GameField.centerOfTile(6, 1), 0);
+            }
+            else {
+                return new Vector2D1(GameField.centerOfTile(6, 3), 0);
+            }
+        }
+        else {
+            if ( position == AlliancePosition.LEFT) {
+                return new Vector2D1(GameField.centerOfTile(6, 6), 0);
+            }
+            else {
+                return new Vector2D1(GameField.centerOfTile(6, 4), 0);
+            }
+        }
     }
 
     /**
@@ -249,5 +270,109 @@ public class GameField {
                 return new Vector2D(-35.5, 24.5);
             }
         }
+    }
+
+    /**
+     * Takes the current pose and the delta of position to detect for collisions and returns
+     * a corrected delta that avoids collisions.
+     * @param tracker
+     * @param delta
+     * @return
+     */
+    public static Vector2D avoidCollisions(DeadWheelTracker tracker, Vector2D delta){
+
+        // project the next position
+        Vector2D nextPose = tracker.projectNextPose(delta);
+
+        double dx = delta.getX();
+        double dy = delta.getY();
+
+        // first test for collisions with the field perimeter
+        if(nextPose.getX() - DeadWheelTracker.COLLISION_RADIUS < -PERIMETER){
+            if(dx < 0)
+                dx = 0;
+        }
+        else if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > PERIMETER){
+            if(dx > 0)
+                dx = 0;
+        }
+
+        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < -PERIMETER){
+            if(dy < 0)
+                dy = 0;
+        }
+        else if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > PERIMETER){
+            if(dy > 0)
+                dy = 0;
+        }
+
+        // test for collisions with the backdrop
+        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < TILE_SIZE * 2){
+            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > TILE_SIZE){
+                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > TILE_SIZE * 2.5){
+                    if(dx > 0){
+                        dx = 0;
+                    }
+                }
+            }
+        }
+
+        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < TILE_SIZE){
+            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > TILE_SIZE * 2){
+                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > TILE_SIZE * 2.5){
+                    if(dx > 0){
+                        dx = 0;
+                    }
+                }
+            }
+        }
+
+        // test for collisions with other obstacles (poles)
+        Vector2D del = avoidPole(TILE_SIZE * 0, TILE_SIZE * 1, nextPose, dx, dy);
+        del = avoidPole(TILE_SIZE * 0, TILE_SIZE * 2, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * 0, TILE_SIZE * 3, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * 0, TILE_SIZE * -1, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * 0, TILE_SIZE * -2, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * 0, TILE_SIZE * -3, nextPose, del.getX(), del.getY());
+
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * 1, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * 2, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * 3, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * -1, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * -2, nextPose, del.getX(), del.getY());
+        del = avoidPole(TILE_SIZE * -1, TILE_SIZE * -3, nextPose, del.getX(), del.getY());
+
+        return new Vector2D(del.getX(), del.getY());
+    }
+
+    private static Vector2D avoidPole(double x, double y, Vector2D nextPose, double dx, double dy){
+        if(nextPose.getX() - DeadWheelTracker.COLLISION_RADIUS < x) {
+            if (x < nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS) {
+                if (nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < y) {
+                    if (y < nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS) {
+                        // there is a potential collisions
+                        if (x > nextPose.getX()) {
+                            if (dx > 0) {
+                                dx = 0;
+                            }
+                        } else {
+                            if (dx < 0) {
+                                dx = 0;
+                            }
+                        }
+                        if (y > nextPose.getY()) {
+                            if (dy > 0) {
+                                dy = 0;
+                            }
+                        } else {
+                            if (dy < 0) {
+                                dy = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return new Vector2D(dx, dy);
     }
 }

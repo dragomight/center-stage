@@ -61,7 +61,7 @@ public class BillsTestDrive extends LinearOpMode {
 
         // read last pose from file and reset dead wheel tracker
 //        Vector2D1 v = readFromFileUsingScanner();
-        cadbot.deadWheelTracker.resetPose(new Vector2D1(0, 0, 0));
+        cadbot.deadWheelTracker.resetPose(GameField.getDriverStartPose(cadbot.allianceColor, cadbot.alliancePosition));
 
         waitForStart();
 
