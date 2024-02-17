@@ -19,8 +19,6 @@ public class BlueLeft {
                 .driveTo(GameField.betweenTiles(4, 6, 5, 6), Math.toRadians(-90)) // backup
                 .rotateTo(GameField.betweenTiles(4, 6, 5, 6), Math.toRadians(0)) // rotate to face the backdrop
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
-                .gripperPush(2.0, true)
-                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
@@ -34,8 +32,6 @@ public class BlueLeft {
                 .rotateTo(GameField.centerOfTile(5,5), Math.toRadians(0)) // rotate to face the backdrop
                 .driveTo(GameField.centerOfTile(5, 6), Math.toRadians(0)) // park
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
-                .gripperPush(2.0, true)
-                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();
     }
@@ -45,8 +41,6 @@ public class BlueLeft {
                 .driveTo(GameField.centerSpike(cadbot).add(0, 5.0), Math.toRadians(-90)) // drive to spike
                 .driveTo(GameField.centerOfTile(4, 6), Math.toRadians(-90)) // backup
                 .rotateTo(GameField.centerOfTile(4,6), Math.toRadians(0)) // rotate to face the backdrop
-                .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
-                .gripperPush(2.0, true)
                 .driveTo(GameField.centerOfTile(6, 6), Math.toRadians(0)) // park
 //                .driveTo(GameField.redBackdrop(), Math.toRadians(0)) // to the backdrop
                 .build();

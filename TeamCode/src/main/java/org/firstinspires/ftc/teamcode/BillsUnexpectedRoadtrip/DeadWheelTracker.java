@@ -208,6 +208,7 @@ public class DeadWheelTracker {
                 pose.getX() + velocity.getX() * avgDt + .5 * acc.getX() * avgDt * avgDt,
                 pose.getY() + velocity.getY() * avgDt + .5 * acc.getY() * avgDt * avgDt);
 
+        Log.e("DeadWheelTracker", this + " proj=" + projected);
         return projected;
     }
 
@@ -215,7 +216,7 @@ public class DeadWheelTracker {
         //delta.getX()/GRANES;
         // given the current velocity and the power delta, what is the likely acceleration
         //return new Vector2D(powerResponseX[vel][del], powerResponseY[vel][del]);
-        return new Vector2D();
+        return delta.copy().multiplyBy(20);
     }
 
     public Vector2D1 getPose(){
