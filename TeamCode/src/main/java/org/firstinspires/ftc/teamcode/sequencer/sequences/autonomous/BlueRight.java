@@ -50,9 +50,8 @@ public class BlueRight {
                 .driveTo(GameField.centerSpike(cadbot).add(0, 5.0), Math.toRadians(-90)) // drive to spike
                 .driveTo(GameField.centerOfTile(2,5), Math.toRadians(-90)) // backup
                 .driveTo(GameField.centerOfTile(1, 5).add(3, 0), Math.toRadians(-90)) // strafe toward wall
-                .driveTo(GameField.centerOfTile(1,4).add(3, 0), Math.toRadians(-90)) // forward to the center
-                .rotateTo(GameField.centerOfTile(1,4).add(3, 0), Math.toRadians(0)) // rotate to face the backdrop
-                .driveTo(GameField.centerOfTile(5, 4), Math.toRadians(0)) // forward down the center
+                .driveTo(GameField.centerOfTile(1,4).add(3, -3), Math.toRadians(-90)) // forward to the center
+                .rotateTo(GameField.centerOfTile(1,4).add(3, -3), Math.toRadians(0)) // rotate to face the backdrop
 
 //                .driveTo(GameField.blueBackdrop().add(-ArmConstants.L3, target.y), 0)
 //                .moveArmTo(ArmPoseXZ.ready2())
