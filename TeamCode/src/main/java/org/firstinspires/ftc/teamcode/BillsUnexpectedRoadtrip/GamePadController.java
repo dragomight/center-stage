@@ -65,8 +65,8 @@ public class GamePadController {
             // get the most recent pose
             Vector2D1 currentPose = cadbot.deadWheelTracker.getPose();
 
-            // test for collisions with the field perimeter
-            Vector2D revised = GameField.avoidCollisions(cadbot.deadWheelTracker, new Vector2D(x, y));
+            // Avoid collisions with game obstacles
+            Vector2D revised = CollisionInsurance.avoidCollisions(cadbot.deadWheelTracker, new Vector2D(x, y));
 
             // transform that vector to robot coordinates
             Vector2D toTargetRobotCoords = GameField.fieldToRobot(revised, -currentPose.getHeading());

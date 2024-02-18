@@ -201,14 +201,14 @@ public class DeadWheelTracker {
     public Vector2D projectNextPose(Vector2D delta){
         Vector2D1 pose = getPose();
         Vector2D1 velocity = getVelocity();
-        Vector2D1 acc = getAcceleration(); // we need to project the acceleration from the delta
-        double avgDt = getAvgDt();
+        Vector2D acc = projectAcceleration(delta); // we need to project the acceleration from the delta
+        double avgDt = getAvgDt() * 10; // we can project 10 time steps in the future, at 60 in/s that's looking 6 in ahead, enough time to stop
 
         Vector2D projected = new Vector2D(
                 pose.getX() + velocity.getX() * avgDt + .5 * acc.getX() * avgDt * avgDt,
                 pose.getY() + velocity.getY() * avgDt + .5 * acc.getY() * avgDt * avgDt);
 
-        Log.e("DeadWheelTracker", this + " proj=" + projected);
+        Log.e("DeadWheelTracker", this + " proj=" + projected + " pow=" + delta);
         return projected;
     }
 
@@ -216,7 +216,7 @@ public class DeadWheelTracker {
         //delta.getX()/GRANES;
         // given the current velocity and the power delta, what is the likely acceleration
         //return new Vector2D(powerResponseX[vel][del], powerResponseY[vel][del]);
-        return delta.copy().multiplyBy(20);
+        return delta.copy().multiplyBy(1500); // as high as 1500
     }
 
     public Vector2D1 getPose(){
