@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BillsUnexpectedRoadtrip;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.BillsEs.AllianceColor;
@@ -82,9 +84,9 @@ public class GamePadController {
                     error = -Vector2D1.angularDifference(preferredHeading, currentPose.getHeading())/Math.PI;
                     yaw = error * KP; // error is already small
                     yaw = UtilityKit.limitToRange(yaw, -1.0, 1.0);
-                    if(Math.abs(error) > maxError){
-                        maxError = Math.abs(error);
-                    }
+//                    if(Math.abs(error) > maxError){
+//                        maxError = Math.abs(error);
+//                    }
                 }
             }
             else {
@@ -102,7 +104,7 @@ public class GamePadController {
 
 //            cadbot.deadWheelTracker.recordsUpdate();
 //            Log.e("GamePadController", cadbot.deadWheelTracker.toString());
-//            Log.e("GamePadController", "power=" + toTargetRobotCoords.getX() + "   " + toTargetRobotCoords.getY() + "   " + yaw);
+//            Log.e("GamePadController", "power=" + toTargetRobotCoords.getX() + ", " + toTargetRobotCoords.getY() + ", " + yaw);
 //            Log.e("GamePadController", "topSpeed=" + cadbot.deadWheelTracker.topSpeed + "   topAccel=" + cadbot.deadWheelTracker.topAcceleration);
         }
 

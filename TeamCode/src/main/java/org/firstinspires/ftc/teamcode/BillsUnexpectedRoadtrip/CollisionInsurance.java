@@ -4,8 +4,8 @@ import org.firstinspires.ftc.teamcode.BillsUtilityGarage.Vector2D;
 
 public class CollisionInsurance {
     /**
-     * Takes the current pose and the delta of position to detect for collisions and returns
-     * a corrected delta that avoids collisions.
+     * Uses the delta of power in field coordinates to estimate the next position and then
+     * detects for collisions and returns a corrected delta that avoids collisions.
      * @param tracker
      * @param delta
      * @return
@@ -15,8 +15,8 @@ public class CollisionInsurance {
         // project the next position
         Vector2D nextPose = tracker.projectNextPose(delta);
 
-        double dx = delta.getX();
-        double dy = delta.getY();
+        double dx = delta.getX(); // dx is the power level given by the joystick in x dir [-1, 1]
+        double dy = delta.getY(); // dy same but for y
 
         // first test for collisions with the field perimeter
         if(nextPose.getX() - DeadWheelTracker.COLLISION_RADIUS < -GameField.PERIMETER){

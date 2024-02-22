@@ -24,7 +24,6 @@ public class MecanumController {
     // yaw is the amount to turn
     public void setDrivePowerRelativeToRobot(double axial, double lateral, double yaw){
         double max;
-        //lateral *= -1; // we have to reverse it to match robot coordinates
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
