@@ -41,6 +41,8 @@ public class MotorPool {
     // Functionality Limits
     public boolean gripperOnline = true;
 
+    public static final double POW_MAX = .8;
+
     public void initialize(HardwareMap hardwareMap){
 
         try {
@@ -246,9 +248,9 @@ public class MotorPool {
     }
 
     public void setDrivePower(double leftFront, double rightFront, double rightBack, double leftBack){
-        leftFrontDrive.setPower(leftFront);
-        rightFrontDrive.setPower(rightFront);
-        rightBackDrive.setPower(rightBack);
-        leftBackDrive.setPower(leftBack);
+        leftFrontDrive.setPower(leftFront * POW_MAX);
+        rightFrontDrive.setPower(rightFront * POW_MAX);
+        rightBackDrive.setPower(rightBack * POW_MAX);
+        leftBackDrive.setPower(leftBack * POW_MAX);
     }
 }

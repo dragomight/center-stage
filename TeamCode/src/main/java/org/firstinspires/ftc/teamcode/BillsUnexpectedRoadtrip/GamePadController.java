@@ -104,7 +104,7 @@ public class GamePadController {
 
 //            cadbot.deadWheelTracker.recordsUpdate();
 //            Log.e("GamePadController", cadbot.deadWheelTracker.toString());
-//            Log.e("GamePadController", "power=" + toTargetRobotCoords.getX() + ", " + toTargetRobotCoords.getY() + ", " + yaw);
+            Log.e("GamePadController", "power=" + toTargetRobotCoords.getX() + ", " + toTargetRobotCoords.getY() + ", " + yaw);
 //            Log.e("GamePadController", "topSpeed=" + cadbot.deadWheelTracker.topSpeed + "   topAccel=" + cadbot.deadWheelTracker.topAcceleration);
         }
 

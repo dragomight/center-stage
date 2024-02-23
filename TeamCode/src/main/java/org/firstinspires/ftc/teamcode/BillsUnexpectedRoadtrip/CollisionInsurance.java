@@ -38,42 +38,46 @@ public class CollisionInsurance {
         }
 
         // test for collisions with the backdrop
-        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < GameField.TILE_SIZE * 2){
-            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE){
-                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2.5){
-                    if(dx > 0){
-                        dx = 0;
-                    }
-                }
-            }
-        }
-
-        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < GameField.TILE_SIZE){
-            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2){
-                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2.5){
-                    if(dx > 0){
-                        dx = 0;
-                    }
-                }
-            }
-        }
+//        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < GameField.TILE_SIZE * 2){
+//            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE){
+//                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2.5){
+//                    if(dx > 0){
+//                        dx = 0;
+//                    }
+//                }
+//            }
+//        }
+//
+//        if(nextPose.getY() - DeadWheelTracker.COLLISION_RADIUS < GameField.TILE_SIZE){
+//            if(nextPose.getY() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2){
+//                if(nextPose.getX() + DeadWheelTracker.COLLISION_RADIUS > GameField.TILE_SIZE * 2.5){
+//                    if(dx > 0){
+//                        dx = 0;
+//                    }
+//                }
+//            }
+//        }
 
         // test for collisions with other obstacles (poles)
-        Vector2D del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 1, nextPose, dx, dy);
-        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 2, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 3, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -1, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -2, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -3, nextPose, del.getX(), del.getY());
-
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 1, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 2, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 3, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -1, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -2, nextPose, del.getX(), del.getY());
-        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -3, nextPose, del.getX(), del.getY());
-
-        return new Vector2D(del.getX(), del.getY());
+//        Vector2D del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 1, nextPose, dx, dy);
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 2, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 3, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -1, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -2, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * -3, nextPose, del.getX(), del.getY());
+//
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 1, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 2, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * 3, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -1, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -2, nextPose, del.getX(), del.getY());
+//        del = avoidPole(GameField.TILE_SIZE * -1, GameField.TILE_SIZE * -3, nextPose, del.getX(), del.getY());
+//
+//        // test pole at 0, 0
+//        del = avoidPole(GameField.TILE_SIZE * 0, GameField.TILE_SIZE * 0, nextPose, del.getX(), del.getY());
+//
+//        return new Vector2D(del.getX(), del.getY());
+        return new Vector2D(dx, dy);
     }
 
     private static Vector2D avoidPole(double x, double y, Vector2D nextPose, double dx, double dy){

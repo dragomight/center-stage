@@ -212,11 +212,18 @@ public class DeadWheelTracker {
         return projected;
     }
 
+    /**
+     * To project acceleration we consider the maximum stopping rate.
+     * Since the time to stop is estimated at avgDt * 10, and the maximum speed observed is
+     * around 60 in/sec.  a = (vf - vi) / (avgDt * 10) = 600
+     * @param delta
+     * @return
+     */
     public Vector2D projectAcceleration(Vector2D delta){
         //delta.getX()/GRANES;
         // given the current velocity and the power delta, what is the likely acceleration
         //return new Vector2D(powerResponseX[vel][del], powerResponseY[vel][del]);
-        return delta.copy().multiplyBy(1500); // as high as 1500
+        return delta.copy().multiplyBy(600); // as high as 1500 but stopped us 8 inches too early
     }
 
     public Vector2D1 getPose(){
