@@ -59,7 +59,13 @@ public class AutoPilot {
         if(cadbot.allianceColor == AllianceColor.BLUE) {
             // if left
             if(cadbot.alliancePosition == AlliancePosition.LEFT) {
-                sequenceDirector.addSequence(BlueLeft.start(cadbot));
+                try {
+                    sequenceDirector.addSequence(ArmTests.reachAccuracy(cadbot));
+                }
+                catch(Exception e){
+
+                }
+//                sequenceDirector.addSequence(BlueLeft.start(cadbot));
             }
             // if right
             else{
